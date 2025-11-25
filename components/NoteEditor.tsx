@@ -89,15 +89,15 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       loadingOverlay.style.position = "fixed";
       loadingOverlay.style.inset = "0";
       loadingOverlay.style.zIndex = "10000";
-      loadingOverlay.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+      loadingOverlay.style.backgroundColor = "rgba(15, 23, 42, 0.9)";
       loadingOverlay.style.backdropFilter = "blur(5px)";
       loadingOverlay.style.display = "flex";
       loadingOverlay.style.alignItems = "center";
       loadingOverlay.style.justifyContent = "center";
       loadingOverlay.style.flexDirection = "column";
       loadingOverlay.innerHTML = `
-        <div style="width: 60px; height: 60px; border: 4px solid #E5E7EB; border-top: 4px solid #064E3B; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-        <p style="margin-top: 20px; font-family: sans-serif; color: #064E3B; font-weight: 700; font-size: 18px;">Generating PDF...</p>
+        <div style="width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #6366f1; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <p style="margin-top: 20px; font-family: sans-serif; color: #6366f1; font-weight: 700; font-size: 18px;">Generating PDF...</p>
         <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
       `;
       document.body.appendChild(loadingOverlay);
@@ -124,10 +124,10 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         day: "numeric",
       });
       const headerHTML = `
-        <div style="border-bottom: 2px solid #064E3B; padding-bottom: 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div style="border-bottom: 2px solid #6366f1; padding-bottom: 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-start;">
           <div style="flex: 1;">
-            <h1 style="font-size: 28px; color: #064E3B; font-family: 'Playfair Display', serif; font-weight: 700; margin: 0 0 8px 0; line-height: 1.2;">${lesson.title}</h1>
-            <p style="font-size: 14px; color: #4B5563; margin: 0; font-weight: 500;">Surah ${lesson.surahName} • Qur'anic Transformation</p>
+            <h1 style="font-size: 28px; color: #6366f1; font-family: 'Plus Jakarta Sans', serif; font-weight: 700; margin: 0 0 8px 0; line-height: 1.2;">${lesson.title}</h1>
+            <p style="font-size: 14px; color: #6B7280; margin: 0; font-weight: 500;">Surah ${lesson.surahName} • Qur'anic Transformation</p>
           </div>
           <div style="text-align: right; padding-left: 20px;">
              <div style="font-size: 12px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Reflection Note</div>
@@ -156,7 +156,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
               .replace(/\*(.*?)\*/g, "<em>$1</em>");
 
             if (cleanLine.trim().startsWith("## ")) {
-              return `<h3 style="font-size: 18px; color: #111827; font-weight: 700; margin-top: 24px; margin-bottom: 12px; font-family: 'Playfair Display', serif; border-left: 4px solid #059669; padding-left: 12px;">${cleanLine.replace(
+              return `<h3 style="font-size: 18px; color: #111827; font-weight: 700; margin-top: 24px; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', serif; border-left: 4px solid #6366f1; padding-left: 12px;">${cleanLine.replace(
                 "## ",
                 ""
               )}</h3>`;
@@ -164,7 +164,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             if (cleanLine.trim().startsWith("- ")) {
               return `
                 <div style="display: flex; align-items: flex-start; margin-bottom: 8px; padding-left: 4px;">
-                  <span style="color: #059669; margin-right: 10px; font-size: 18px; line-height: 1;">•</span>
+                  <span style="color: #6366f1; margin-right: 10px; font-size: 18px; line-height: 1;">•</span>
                   <span style="flex: 1;">${cleanLine.replace("- ", "")}</span>
                 </div>`;
             }
@@ -268,14 +268,14 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       return parts.map((part, i) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
-            <strong key={i} className="text-stone-900 font-bold">
+            <strong key={i} className="text-white font-bold">
               {part.slice(2, -2)}
             </strong>
           );
         }
         if (part.startsWith("*") && part.endsWith("*")) {
           return (
-            <em key={i} className="italic text-stone-800">
+            <em key={i} className="italic text-indigo-100">
               {part.slice(1, -1)}
             </em>
           );
@@ -286,7 +286,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
 
     return (
       <div
-        className={`prose prose-stone max-w-none ${
+        className={`prose prose-invert max-w-none ${
           rtl
             ? "font-urdu text-right text-xl leading-loose"
             : "text-left leading-relaxed"
@@ -299,7 +299,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             return (
               <h3
                 key={i}
-                className="text-xl font-bold text-stone-900 mt-6 mb-3 font-serif border-l-4 border-emerald-500 pl-3"
+                className="text-xl font-display font-bold text-white mt-6 mb-3 border-l-4 border-indigo-500 pl-3 tracking-tight"
               >
                 {line.replace("## ", "")}
               </h3>
@@ -307,16 +307,16 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
           if (line.startsWith("- "))
             return (
               <div key={i} className="flex gap-3 ml-1 mb-1 items-start">
-                <span className="text-emerald-500 font-bold text-lg leading-none mt-1">
+                <span className="text-indigo-400 font-bold text-lg leading-none mt-1">
                   •
                 </span>
-                <span className="text-stone-700">
+                <span className="text-indigo-100">
                   {parseFormattedText(line.replace("- ", ""))}
                 </span>
               </div>
             );
           return (
-            <p key={i} className="mb-2 text-stone-700">
+            <p key={i} className="mb-2 text-indigo-100">
               {parseFormattedText(line)}
             </p>
           );
@@ -326,13 +326,13 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#FAFAF9] flex flex-col animate-in slide-in-from-bottom duration-300">
-      <div className="flex items-center justify-between px-6 py-5 bg-[#FAFAF9] z-10 border-b-2 border-stone-200">
+    <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col animate-in slide-in-from-bottom duration-300">
+      <div className="flex items-center justify-between px-6 py-5 glass-dark border-b border-white/10 z-10">
         <div className="flex-1 truncate pr-6">
-          <h3 className="font-bold text-2xl text-stone-900 leading-tight truncate">
+          <h3 className="font-display font-bold text-2xl text-white leading-tight truncate tracking-tight">
             {lesson.title}
           </h3>
-          <p className="text-sm text-stone-500 font-bold uppercase tracking-widest mt-2">
+          <p className="text-sm text-indigo-300 font-bold uppercase tracking-widest mt-2">
             {lastSaved ? `Saved ${lastSaved.toLocaleTimeString()}` : "Unsaved"}
           </p>
         </div>
@@ -340,15 +340,15 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
           <button
             onClick={handleExportPDF}
             disabled={exporting}
-            className={`flex items-center gap-3 px-5 py-3 rounded-2xl text-base font-bold transition-all border-2 ${
+            className={`flex items-center gap-3 px-5 py-3 rounded-2xl text-base font-display font-bold transition-all border ${
               exporting
-                ? "bg-stone-100 text-stone-400 border-stone-200"
-                : "bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200 border-emerald-700 focus:ring-4 focus:ring-emerald-500/30"
+                ? "bg-white/5 text-indigo-400 border-white/10"
+                : "bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:shadow-lg shadow-indigo-500/30 border-transparent focus:ring-2 focus:ring-indigo-500/50"
             }`}
           >
             {exporting ? (
               <>
-                <div className="w-5 h-5 border-3 border-stone-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-3 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
                 <span>Saving...</span>
               </>
             ) : (
@@ -360,7 +360,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
           </button>
           <button
             onClick={onClose}
-            className="p-3 bg-stone-200 text-stone-600 rounded-full hover:bg-stone-300 border-2 border-stone-300 focus:ring-4 focus:ring-emerald-500/30 transition-colors"
+            className="p-3 glass rounded-full text-indigo-300 hover:bg-red-500/20 border border-white/10 focus:ring-2 focus:ring-indigo-500/50 transition-all duration-300"
           >
             <X size={24} />
           </button>
@@ -368,44 +368,44 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       </div>
 
       {activeTab === "write" && (
-        <div className="flex items-center gap-3 px-6 py-4 overflow-x-auto no-scrollbar bg-white border-b-2 border-stone-200">
-          <div className="flex bg-stone-100 p-2 rounded-2xl border-2 border-stone-200">
+        <div className="flex items-center gap-3 px-6 py-4 overflow-x-auto no-scrollbar glass-dark border-b border-white/10">
+          <div className="flex glass p-2 rounded-2xl border border-white/10">
             <button
               onClick={() => insertSyntax("**", "**")}
-              className="p-3 hover:bg-white hover:shadow-sm rounded-xl text-stone-600 transition-all border-2 border-transparent hover:border-stone-300 focus:ring-4 focus:ring-emerald-500/30"
+              className="p-3 hover:bg-white/10 hover:shadow-sm rounded-xl text-indigo-300 transition-all border border-transparent hover:border-indigo-500/30 focus:ring-2 focus:ring-indigo-500/50"
               title="Bold"
             >
               <Bold size={20} />
             </button>
             <button
               onClick={() => insertSyntax("*", "*")}
-              className="p-3 hover:bg-white hover:shadow-sm rounded-xl text-stone-600 transition-all border-2 border-transparent hover:border-stone-300 focus:ring-4 focus:ring-emerald-500/30"
+              className="p-3 hover:bg-white/10 hover:shadow-sm rounded-xl text-indigo-300 transition-all border border-transparent hover:border-indigo-500/30 focus:ring-2 focus:ring-indigo-500/50"
               title="Italic"
             >
               <Italic size={20} />
             </button>
             <button
               onClick={() => insertSyntax("- ")}
-              className="p-3 hover:bg-white hover:shadow-sm rounded-xl text-stone-600 transition-all border-2 border-transparent hover:border-stone-300 focus:ring-4 focus:ring-emerald-500/30"
+              className="p-3 hover:bg-white/10 hover:shadow-sm rounded-xl text-indigo-300 transition-all border border-transparent hover:border-indigo-500/30 focus:ring-2 focus:ring-indigo-500/50"
               title="List"
             >
               <List size={20} />
             </button>
             <button
               onClick={() => insertSyntax("## ")}
-              className="p-3 hover:bg-white hover:shadow-sm rounded-xl text-stone-600 transition-all border-2 border-transparent hover:border-stone-300 focus:ring-4 focus:ring-emerald-500/30"
+              className="p-3 hover:bg-white/10 hover:shadow-sm rounded-xl text-indigo-300 transition-all border border-transparent hover:border-indigo-500/30 focus:ring-2 focus:ring-indigo-500/50"
               title="Heading"
             >
               <Type size={20} />
             </button>
           </div>
-          <div className="h-10 w-[2px] bg-stone-300 mx-2"></div>
+          <div className="h-10 w-[2px] bg-white/10 mx-2"></div>
           <button
             onClick={() => setIsUrdu(!isUrdu)}
-            className={`px-5 py-3 rounded-2xl text-base font-bold flex items-center gap-3 transition-all shadow-sm border-2 ${
+            className={`px-5 py-3 rounded-2xl text-base font-display font-bold flex items-center gap-3 transition-all border ${
               isUrdu
-                ? "bg-emerald-100 border-emerald-300 text-emerald-800"
-                : "bg-white border-stone-200 text-stone-600 hover:border-emerald-300 focus:ring-4 focus:ring-emerald-500/30"
+                ? "bg-indigo-500/20 border-indigo-500/30 text-indigo-300"
+                : "glass border-white/10 text-indigo-300 hover:border-indigo-500/30 hover:text-white focus:ring-2 focus:ring-indigo-500/50"
             }`}
           >
             {isUrdu ? <AlignRight size={20} /> : <AlignLeft size={20} />}
@@ -414,12 +414,12 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         </div>
       )}
 
-      <div className="flex-1 overflow-hidden relative bg-white">
+      <div className="flex-1 overflow-hidden relative bg-slate-900/50">
         {activeTab === "write" ? (
           <textarea
             ref={textareaRef}
             dir={isUrdu ? "rtl" : "ltr"}
-            className={`w-full h-full p-6 resize-none focus:outline-none bg-transparent text-stone-800 leading-relaxed text-xl border-2 border-transparent focus:border-emerald-300 focus:ring-4 focus:ring-emerald-500/30 ${
+            className={`w-full h-full p-6 resize-none focus:outline-none bg-transparent text-indigo-100 leading-relaxed text-xl border border-transparent focus:border-indigo-500/30 focus:ring-2 focus:ring-indigo-500/50 ${
               isUrdu ? "font-urdu text-2xl" : "font-sans text-lg"
             }`}
             placeholder={
@@ -436,7 +436,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             {content.trim() ? (
               <MarkdownRenderer text={content} rtl={isUrdu} />
             ) : (
-              <p className="text-stone-400 italic text-center mt-20 text-xl">
+              <p className="text-indigo-400 italic text-center mt-20 text-xl">
                 Nothing to preview yet.
               </p>
             )}
@@ -444,24 +444,24 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
         )}
       </div>
 
-      <div className="bg-white border-t-2 border-stone-200 pb-safe">
+      <div className="glass-dark border-t border-white/10 pb-safe">
         <div className="flex text-center">
           <button
             onClick={() => setActiveTab("write")}
-            className={`flex-1 py-5 text-base font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 border-t-2 ${
+            className={`flex-1 py-5 text-base font-display font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 border-t-2 ${
               activeTab === "write"
-                ? "text-emerald-800 bg-emerald-100/50 border-emerald-500"
-                : "text-stone-500 border-transparent hover:bg-stone-50 focus:ring-4 focus:ring-emerald-500/30"
+                ? "text-indigo-300 bg-indigo-500/20 border-indigo-500"
+                : "text-indigo-400 border-transparent hover:bg-white/5 focus:ring-2 focus:ring-indigo-500/50"
             }`}
           >
             <PenTool size={20} /> Write Mode
           </button>
           <button
             onClick={() => setActiveTab("preview")}
-            className={`flex-1 py-5 text-base font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 border-t-2 ${
+            className={`flex-1 py-5 text-base font-display font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 border-t-2 ${
               activeTab === "preview"
-                ? "text-emerald-800 bg-emerald-100/50 border-emerald-500"
-                : "text-stone-500 border-transparent hover:bg-stone-50 focus:ring-4 focus:ring-emerald-500/30"
+                ? "text-indigo-300 bg-indigo-500/20 border-indigo-500"
+                : "text-indigo-400 border-transparent hover:bg-white/5 focus:ring-2 focus:ring-indigo-500/50"
             }`}
           >
             <Eye size={20} /> Preview Mode
