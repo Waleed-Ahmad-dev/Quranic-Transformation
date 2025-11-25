@@ -54,13 +54,13 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
   return (
     <>
       <div
-        className="fixed inset-0 bg-emerald-950/70 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-300"
+        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-300"
         onClick={onClose}
       />
-      <div className="fixed inset-x-0 bottom-0 z-50 transform transition-transform animate-in slide-in-from-bottom duration-300 bg-white rounded-t-[2.5rem] shadow-[0_-20px_60px_rgba(0,0,0,0.3)] overflow-hidden max-h-[92vh] flex flex-col border-2 border-emerald-200">
+      <div className="fixed inset-x-0 bottom-0 z-50 transform transition-transform animate-in slide-in-from-bottom duration-300 glass rounded-t-[3rem] shadow-[0_-20px_60px_rgba(79,70,229,0.3)] overflow-hidden max-h-[92vh] flex flex-col border border-white/10 backdrop-blur-xl">
         {/* Handle Bar */}
         <div className="flex justify-center pt-4 pb-2" onClick={onClose}>
-          <div className="w-20 h-2 bg-slate-300 rounded-full"></div>
+          <div className="w-20 h-2 bg-white/20 rounded-full"></div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 pb-safe">
@@ -68,30 +68,30 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
           <div className="flex justify-between items-start mb-8">
             <div>
               <span
-                className={`px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider border-2 ${theme.badge} border-emerald-200`}
+                className={`px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider border ${theme.badge} border-indigo-500/20 backdrop-blur-sm`}
               >
                 {lesson.part}
               </span>
-              <h2 className="text-4xl font-bold text-slate-900 mt-4 leading-tight">
+              <h2 className="text-4xl font-display font-bold text-white mt-4 leading-tight tracking-tight">
                 {lesson.title}
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="p-3 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 border-2 border-slate-200 focus:ring-4 focus:ring-emerald-500/30 transition-colors"
+              className="p-3 glass rounded-full text-indigo-300 hover:bg-red-500/20 border border-white/10 focus:ring-2 focus:ring-indigo-500/50 transition-all duration-300"
             >
               <X size={28} />
             </button>
           </div>
 
           {/* Meta Info */}
-          <div className="flex items-center gap-8 mb-8 text-lg font-semibold text-slate-600 border-b-2 border-slate-200 pb-6">
+          <div className="flex items-center gap-8 mb-8 text-lg font-semibold text-indigo-200 border-b border-white/10 pb-6">
             <div className="flex items-center gap-3">
-              <BookOpen size={22} className="text-emerald-600" />
+              <BookOpen size={22} className="text-indigo-400" />
               <span>{lesson.surahName}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Clock size={22} className="text-emerald-600" />
+              <Clock size={22} className="text-indigo-400" />
               <span>{lesson.hours} Hours</span>
             </div>
           </div>
@@ -99,19 +99,19 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
           {/* Urdu Title & Desc */}
           <div className="space-y-8 mb-12">
             <div className="text-right">
-              <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-3">
+              <p className="text-sm font-bold text-indigo-300 uppercase tracking-widest mb-3">
                 Urdu Title
               </p>
-              <h3 className="font-urdu text-4xl text-emerald-900 leading-loose font-bold">
+              <h3 className="font-urdu text-4xl text-indigo-200 leading-loose font-bold">
                 {lesson.urduTitle}
               </h3>
             </div>
 
-            <div className="bg-slate-100 p-8 rounded-3xl border-2 border-slate-200">
-              <p className="text-slate-700 leading-relaxed text-xl font-medium">
+            <div className="glass p-8 rounded-3xl border border-white/10">
+              <p className="text-indigo-100 leading-relaxed text-xl font-medium">
                 {lesson.description}
               </p>
-              <div className="mt-6 pt-6 border-t-2 border-slate-300 flex justify-between text-sm font-bold text-slate-500 uppercase tracking-wider">
+              <div className="mt-6 pt-6 border-t border-white/10 flex justify-between text-sm font-bold text-indigo-300 uppercase tracking-wider">
                 <span>Verse Range</span>
                 <span>{lesson.verses}</span>
               </div>
@@ -122,10 +122,10 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
           <div className="grid grid-cols-2 gap-4 pb-8">
             <button
               onClick={onOpenNote}
-              className={`col-span-2 py-5 px-6 rounded-2xl font-bold flex items-center justify-center gap-4 transition-all active:scale-95 shadow-lg border-2 ${
+              className={`col-span-2 py-5 px-6 rounded-2xl font-display font-bold flex items-center justify-center gap-4 transition-all active:scale-95 shadow-lg border ${
                 hasNote
-                  ? "bg-amber-100 text-amber-900 border-amber-300"
-                  : "bg-white text-slate-700 border-slate-200 hover:border-emerald-500 hover:text-emerald-800 focus:ring-4 focus:ring-emerald-500/30"
+                  ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                  : "glass text-indigo-200 border-white/10 hover:border-indigo-500/30 hover:text-white focus:ring-2 focus:ring-indigo-500/50"
               }`}
             >
               <Edit3 size={24} />
@@ -137,21 +137,21 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
               <>
                 <button
                   onClick={onOpenPdf}
-                  className="py-5 px-6 rounded-2xl bg-[#064E3B] text-white font-bold flex flex-col items-center justify-center gap-3 shadow-2xl shadow-emerald-900/30 transition-transform active:scale-95 border-2 border-emerald-800 focus:ring-4 focus:ring-emerald-500/30"
+                  className="py-5 px-6 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-display font-bold flex flex-col items-center justify-center gap-3 shadow-2xl shadow-indigo-500/30 transition-transform active:scale-95 border border-transparent focus:ring-2 focus:ring-indigo-500/50"
                 >
                   <FileText size={28} />
                   <span className="text-lg">Read PDF</span>
                 </button>
                 <button
                   onClick={handleDownload}
-                  className={`py-5 px-6 rounded-2xl border-2 font-bold flex flex-col items-center justify-center gap-3 transition-transform active:scale-95 focus:ring-4 focus:ring-emerald-500/30 ${
+                  className={`py-5 px-6 rounded-2xl border font-display font-bold flex flex-col items-center justify-center gap-3 transition-transform active:scale-95 focus:ring-2 focus:ring-indigo-500/50 ${
                     isDownloaded
-                      ? "border-emerald-200 bg-emerald-100 text-emerald-800"
-                      : "border-slate-200 bg-white text-slate-700 hover:border-emerald-500"
+                      ? "border-emerald-500/30 bg-emerald-500/20 text-emerald-300"
+                      : "glass border-white/10 text-indigo-200 hover:border-indigo-500/30 hover:text-white"
                   }`}
                 >
                   {downloading ? (
-                    <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-8 h-8 border-3 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
                   ) : isDownloaded ? (
                     <CheckCircle size={28} />
                   ) : (
@@ -163,7 +163,7 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
                 </button>
               </>
             ) : (
-              <div className="col-span-2 p-6 text-center text-slate-500 text-lg italic bg-slate-100 rounded-2xl border-2 border-slate-200">
+              <div className="col-span-2 p-6 text-center text-indigo-300 text-lg italic glass rounded-2xl border border-white/10">
                 No PDF Material Available
               </div>
             )}
