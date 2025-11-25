@@ -2,56 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Font Definitions */
-:root {
-  --font-urdu: 'Gulzar', serif;
-  --font-sans: 'Inter', sans-serif;
+/* STRICT RULE: No custom classes here. 
+  All styling is handled via Tailwind Utility classes in components.
+*/
+
+body {
+  @apply bg-slate-50 text-slate-800 antialiased;
 }
 
-.font-urdu {
-  font-family: var(--font-urdu);
-  font-size: 1.2em;
-  line-height: 2.2;
-}
-
-.font-display {
-  font-family: var(--font-sans);
-  font-weight: 600;
-}
-
-/* Utilities */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.pb-safe {
-  padding-bottom: env(safe-area-inset-bottom);
-}
-.pt-safe {
-  padding-top: env(safe-area-inset-top);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.animate-in {
-  animation-duration: 300ms;
-  animation-fill-mode: forwards;
-}
-.fade-in {
-  animation-name: fadeIn;
-}
-.slide-in-from-bottom {
-  animation-name: slideUp;
+/* Scrollbar hiding for "no-scrollbar" utility equivalent */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
 }
