@@ -7,7 +7,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-
 interface BottomNavProps {
   activeView: string;
   onChangeView: (view: any) => void;
@@ -30,29 +29,28 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onChangeView }) => {
     <>
       {/* Spacer to prevent content overlap */}
       <div
-        className="h-24 w-full opacity-0 pointer-events-none"
+        className="h-28 w-full opacity-0 pointer-events-none"
         aria-hidden="true"
       />
 
       {/* Main Navigation Container */}
       <div className="fixed bottom-0 left-0 right-0 z-50 w-full">
-        {/* Shadcn Separator for the top border */}
-        <Separator className="bg-emerald-100/60" />
+        {/* Enhanced Separator with gradient */}
+        <Separator className="bg-linear-to-r from-transparent via-emerald-200/40 to-transparent h-px" />
 
-        {/* Glassmorphism Background Layer */}
-        <div className="bg-white/95 backdrop-blur-xl shadow-[0_-4px_20px_-10px_rgba(16,185,129,0.1)]">
-          <div className="relative max-w-md mx-auto px-4 py-3 pb-[calc(12px+env(safe-area-inset-bottom))]">
-            {/* Using Shadcn ToggleGroup to handle navigation state.
-              This replaces manual button mapping with the UI library's native selection logic.
-            */}
+        {/* Enhanced Glassmorphism Background */}
+        <div className="bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-sm shadow-emerald-100/30">
+          <div className="relative max-w-md mx-auto px-6 py-4 pb-[calc(16px+env(safe-area-inset-bottom))]">
+            {/* Decorative Islamic geometric pattern element */}
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-linear-to-r from-transparent via-emerald-400 to-transparent rounded-full opacity-60" />
+
             <ToggleGroup
               type="single"
               value={activeView}
               onValueChange={(value) => {
-                // Prevent unselecting the current tab
                 if (value) onChangeView(value);
               }}
-              className="justify-between gap-2 w-full"
+              className="justify-between gap-3 w-full"
             >
               {navItems.map((item) => {
                 const isActive = activeView === item.id;
@@ -64,44 +62,71 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, onChangeView }) => {
                     value={item.id}
                     aria-label={item.label}
                     className={cn(
-                      // Base Layout
-                      "group flex flex-1 flex-col items-center justify-center gap-1.5 h-auto py-3 rounded-xl transition-all duration-300",
+                      // Base Layout with enhanced spacing
+                      "group relative flex flex-1 flex-col items-center justify-center gap-2 h-auto py-4 rounded-2xl transition-all duration-300 ease-out",
 
-                      // Inactive State
-                      "text-slate-500 hover:text-emerald-600 hover:bg-emerald-50/50 data-[state=off]:hover:scale-[1.02]",
+                      // Enhanced hover and active states
+                      "hover:scale-[1.02] active:scale-[0.98] transform-gpu",
 
-                      // Active State (data-[state=on] is the Shadcn/Radix selector)
-                      "data-[state=on]:bg-emerald-50 data-[state=on]:text-emerald-700",
-                      "data-[state=on]:shadow-sm data-[state=on]:shadow-emerald-100/50 data-[state=on]:border-emerald-100/50"
+                      // Inactive State with subtle depth
+                      "text-slate-600 hover:text-emerald-700 hover:bg-white/80",
+                      "border border-transparent hover:border-emerald-200/60",
+                      "shadow-sm hover:shadow-md hover:shadow-emerald-100/40",
+
+                      // Active State with Islamic aesthetic colors
+                      "data-[state=on]:bg-white data-[state=on]:text-emerald-700",
+                      "data-[state=on]:border-emerald-200 data-[state=on]:shadow-lg",
+                      "data-[state=on]:shadow-emerald-100/60 data-[state=on]:ring-2",
+                      "data-[state=on]:ring-emerald-100 data-[state=on]:ring-offset-2",
+                      "data-[state=on]:ring-offset-white"
                     )}
                   >
-                    {/* Icon with animation on active state */}
-                    <Icon
-                      size={22}
-                      strokeWidth={isActive ? 2.5 : 2}
-                      className={cn(
-                        "transition-all duration-300",
-                        isActive
-                          ? "text-emerald-600 scale-105 drop-shadow-sm"
-                          : "text-slate-400 group-hover:text-emerald-500"
-                      )}
-                    />
+                    {/* Active state background glow */}
+                    {isActive && (
+                      <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-emerald-50/80 to-white/80 -z-10" />
+                    )}
 
-                    {/* Label Text */}
+                    {/* Icon Container with enhanced styling */}
+                    <div
+                      className={cn(
+                        "relative p-2 rounded-xl transition-all duration-300",
+                        isActive
+                          ? "bg-emerald-100/80 shadow-inner shadow-emerald-200/30"
+                          : "bg-slate-50/50 group-hover:bg-emerald-50/60"
+                      )}
+                    >
+                      <Icon
+                        size={20}
+                        strokeWidth={isActive ? 2.5 : 2}
+                        className={cn(
+                          "transition-all duration-300",
+                          isActive
+                            ? "text-emerald-600 scale-110 drop-shadow-sm"
+                            : "text-slate-500 group-hover:text-emerald-500 group-hover:scale-105"
+                        )}
+                      />
+
+                      {/* Subtle decorative dot for Islamic aesthetic */}
+                      {isActive && (
+                        <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 shadow-sm animate-pulse" />
+                      )}
+                    </div>
+
+                    {/* Label Text with improved typography */}
                     <span
                       className={cn(
-                        "text-[10px] font-medium tracking-wide leading-none transition-all duration-200",
+                        "text-xs font-medium tracking-wide leading-tight transition-all duration-200 font-sans",
                         isActive
-                          ? "font-semibold text-emerald-800"
-                          : "text-slate-500"
+                          ? "font-semibold text-emerald-800 drop-shadow-sm"
+                          : "text-slate-600 group-hover:text-emerald-700"
                       )}
                     >
                       {item.label}
                     </span>
 
-                    {/* Active Indicator Dot */}
+                    {/* Enhanced Active Indicator with Islamic geometric inspiration */}
                     {isActive && (
-                      <span className="absolute top-2 right-[20%] h-1.5 w-1.5 rounded-full bg-emerald-500 animate-in zoom-in duration-300" />
+                      <div className="absolute -bottom-1 w-6 h-1 bg-linear-to-r from-emerald-400 to-emerald-500 rounded-full shadow-sm shadow-emerald-300/50 animate-in slide-in-from-bottom-1 duration-500" />
                     )}
                   </ToggleGroupItem>
                 );
