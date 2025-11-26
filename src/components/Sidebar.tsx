@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-slate-900/60 backdrop-blur-md z-40 transition-all duration-300 ${
+        className={`fixed inset-0 bg-slate-900/60 backdrop-blur-md z-40 transition-all duration-300 lg:hidden ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -46,18 +46,18 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar Panel */}
       <div
-        className={`fixed top-0 left-0 h-full w-[85%] max-w-[340px] bg-white/95 backdrop-blur-xl z-50 shadow-xl shadow-emerald-100/50 transform transition-all duration-300 ease-out flex flex-col border-r border-slate-200/80 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 left-0 h-full w-[85%] max-w-[340px] bg-white/95 backdrop-blur-xl z-50 shadow-xl shadow-emerald-100/50 transform transition-all duration-300 ease-out flex flex-col border-r border-slate-200/80 lg:static lg:transform-none lg:w-80 lg:max-w-none lg:shadow-none lg:border-r-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
         {/* Header */}
-        <div className="bg-linear-to-br from-emerald-600 via-teal-600 to-emerald-700 p-6 pb-6 pt-16 border-b border-emerald-200/50 relative overflow-hidden">
+        <div className="bg-linear-to-br from-emerald-600 via-teal-600 to-emerald-700 p-6 pb-6 pt-16 border-b border-emerald-200/50 relative overflow-hidden lg:pt-6">
           {/* Decorative Islamic Pattern */}
           <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDBDOC45NTQgMCAwIDguOTU0IDAgMjBDMCAzMS4wNDYgOC45NTQgNDAgMjAgNDBDMzEuMDQ2IDQwIDQwIDMxLjA0NiA0MCAyMEM0MCA4Ljk1NCAzMS4wNDYgMCAyMCAwWk0yMCAzNkMxMC4wNTkgMzYgMiAyNy45NDEgMiAxOEMyIDguMDU5IDEwLjA1OSAwIDIwIDBDMjkuOTQxIDAgMzggOC4wNTkgMzggMThDMzggMjcuOTQxIDI5Ljk0MSAzNiAyMCAzNloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0yNiAxNEMyNiAxNi4yMDkxIDI0LjIwOTEgMTggMjIgMThDMjEuNDQ3NyAxOCAyMC45MTUgMTcuODIyOCAyMC40NzM0IDE3LjUwMjZMMjIuOTMzOSAxNS4wNDIxQzI0LjE0NzIgMTQuOTU3OSAyNS4xNDc4IDE0LjM1MjIgMjUuNzA3MSAxMy40NjQxQzI1Ljg5NzEgMTMuODE0OSAyNiAxNC4xOTc1IDI2IDE0LjVWMTRaTTE0IDE0QzE0IDExLjc5MDkgMTUuNzkwOSAxMCAxOCAxMEMxOC41NTIzIDEwIDE5LjA4NSAxMC4xNzcyIDE5LjUyNjYgMTAuNDk3NEwxNy4wNjYxIDEyLjk1NzlDMTUuODUyOCAxMy4wNDIxIDE0Ljg1MjIgMTMuNjQ3OCAxNC4yOTI5IDE0LjUzNTlDMTQuMTAyOSAxNC4xODUxIDE0IDE0LjAwMjUgMTQgMTMuNVYxNFoiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=')]"></div>
 
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 text-white/90 hover:bg-white/20 rounded-xl border border-white/30 shadow-sm transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-emerald-600"
+            className="absolute top-6 right-6 p-2 text-white/90 hover:bg-white/20 rounded-xl border border-white/30 shadow-sm transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-emerald-600 lg:hidden"
           >
             <X size={20} />
           </button>
@@ -283,7 +283,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <span>About</span>
           </div>
           <p className="text-sm text-emerald-700/80 font-medium font-sans pl-9">
-            Quranic Transform v3.0 • Mobile Edition
+            Quranic Transform v3.0 • Responsive Edition
           </p>
         </div>
       </div>
