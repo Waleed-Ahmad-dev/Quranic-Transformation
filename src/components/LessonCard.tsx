@@ -30,6 +30,7 @@ interface LessonCardProps {
   hasNote: boolean;
   isDownloaded: boolean;
   onClick: () => void;
+  viewMode?: "grid" | "list";
 }
 
 const LessonCard: React.FC<LessonCardProps> = ({
@@ -37,8 +38,94 @@ const LessonCard: React.FC<LessonCardProps> = ({
   hasNote,
   isDownloaded,
   onClick,
+  viewMode = "grid",
 }) => {
   const theme = getCategoryTheme(lesson.part);
+
+  if (viewMode === "list") {
+    return (
+      <Card
+        className={cn(
+          "group w-full p-0 mb-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out",
+          "bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-sm",
+          "hover:shadow-lg hover:shadow-emerald-100/50 hover:border-emerald-200/60",
+          "hover:scale-[1.01] active:scale-[0.99] lg:flex lg:items-center lg:justify-between"
+        )}
+        onClick={onClick}
+      >
+        <CardContent className="p-0 lg:flex-1 lg:p-6">
+          <div className="flex items-start gap-4">
+            {/* Lesson ID */}
+            <div
+              className={cn(
+                "flex h-12 w-12 items-center justify-center rounded-xl shrink-0",
+                "bg-white border border-slate-200 shadow-sm",
+                "transition-all duration-300 group-hover:shadow-md",
+                theme.gradient
+              )}
+            >
+              <span className="text-sm font-bold text-white">
+                {lesson.id}
+              </span>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 mb-2">
+                <Badge
+                  className={cn(
+                    "rounded-full px-3 py-1 text-xs font-semibold border-0 shadow-sm",
+                    "bg-emerald-600 text-white hover:bg-emerald-700"
+                  )}
+                >
+                  {lesson.part}
+                </Badge>
+                
+                {/* Status Indicators */}
+                <div className="flex items-center gap-2">
+                  {hasNote && (
+                    <StickyNote
+                      size={16}
+                      className="text-amber-600 fill-amber-600/20"
+                    />
+                  )}
+                  {isDownloaded && (
+                    <CheckCircle2
+                      size={16}
+                      className="text-emerald-600 fill-emerald-600/20"
+                    />
+                  )}
+                </div>
+              </div>
+
+              <h3 className="text-base font-semibold text-slate-800 mb-2 line-clamp-2">
+                {lesson.topicName}
+              </h3>
+
+              <div className="flex items-center gap-4 text-sm text-slate-500">
+                <div className="flex items-center gap-2">
+                  <BookOpen size={14} className="text-emerald-500" />
+                  <span>{lesson.surahName}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock size={14} className="text-slate-400" />
+                  <span>{lesson.hours}h</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Indicator */}
+            <div className="flex items-center gap-2 text-slate-400 transition-colors group-hover:text-emerald-600 shrink-0">
+              <ChevronRight
+                size={18}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card
@@ -46,7 +133,7 @@ const LessonCard: React.FC<LessonCardProps> = ({
         "group w-full p-0 mb-4 rounded-2xl cursor-pointer transition-all duration-300 ease-out",
         "bg-white/90 backdrop-blur-sm border border-slate-200/80 shadow-sm",
         "hover:shadow-lg hover:shadow-emerald-100/50 hover:border-emerald-200/60",
-        "hover:scale-[1.02] active:scale-[0.99]"
+        "hover:scale-[1.02] active:scale-[0.99] lg:hover:scale-[1.01]"
       )}
       onClick={onClick}
     >
@@ -128,7 +215,8 @@ const LessonCard: React.FC<LessonCardProps> = ({
               "text-2xl text-emerald-800 leading-[2.2] text-right",
               "transition-all duration-300",
               "group-hover:bg-white group-hover:border-emerald-200/40",
-              "group-hover:text-emerald-900 group-hover:shadow-inner"
+              "group-hover:text-emerald-900 group-hover:shadow-inner",
+              "lg:text-xl lg:py-4"
             )}
             dir="rtl"
           >
@@ -161,7 +249,7 @@ const LessonCard: React.FC<LessonCardProps> = ({
 
             {/* Action Indicator */}
             <div className="flex items-center gap-2 text-slate-400 transition-colors group-hover:text-emerald-600">
-              <span className="text-sm font-medium">View</span>
+              <span className="text-sm font-medium hidden lg:inline">View</span>
               <ChevronRight
                 size={18}
                 className="transition-transform group-hover:translate-x-0.5"
