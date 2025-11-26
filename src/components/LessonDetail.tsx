@@ -67,14 +67,14 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md p-0 gap-0 bg-white/95 backdrop-blur-sm border-0 rounded-2xl shadow-2xl overflow-hidden">
+      <DialogContent className="sm:max-w-md p-0 gap-0 bg-white/95 backdrop-blur-sm border-0 rounded-2xl shadow-2xl overflow-hidden lg:max-w-2xl">
         {/* Header with gradient background */}
-        <DialogHeader className="p-6 pb-4 space-y-4 bg-linear-to-br from-emerald-50 via-teal-50 to-slate-50 border-b border-slate-200/60">
+        <DialogHeader className="p-6 pb-4 space-y-4 bg-linear-to-br from-emerald-50 via-teal-50 to-slate-50 border-b border-slate-200/60 lg:p-8">
           <div className="flex justify-between items-start">
             <div className="space-y-3 flex-1">
               <div className="flex items-center gap-2">
-                <Badge 
-                  variant="secondary" 
+                <Badge
+                  variant="secondary"
                   className={`px-3 py-1 text-xs font-semibold uppercase tracking-wider ${theme.badge} border-0`}
                 >
                   {lesson.part}
@@ -85,12 +85,12 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
                   {lesson.hours}h
                 </span>
               </div>
-              
-              <h2 className="text-xl font-bold text-slate-900 leading-tight pr-12">
+
+              <h2 className="text-xl font-bold text-slate-900 leading-tight pr-12 lg:text-2xl lg:pr-0">
                 {lesson.topicName}
               </h2>
             </div>
-            
+
             <Button
               variant="ghost"
               size="icon"
@@ -102,16 +102,24 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-medium text-emerald-700 bg-white/60 px-3 py-1.5 rounded-lg border border-emerald-100">
+            <div className="flex items-center gap-2 text-sm font-medium text-emerald-700 bg-white/60 px-3 py-1.5 rounded-lg border border-emerald-100 lg:text-base">
               <BookOpen className="h-4 w-4" />
               <span>{lesson.surahName}</span>
             </div>
-            
+
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 rounded-lg"
+              >
                 <Bookmark className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 rounded-lg"
+              >
                 <Share2 className="h-4 w-4" />
               </Button>
             </div>
@@ -119,11 +127,11 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
         </DialogHeader>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 max-h-[60vh]">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 max-h-[60vh] lg:max-h-[70vh] lg:p-8">
           {/* Description Card */}
           <Card className="border-slate-200/60 bg-slate-50/50 shadow-sm">
-            <CardContent className="p-4">
-              <p className="text-sm text-slate-700 leading-relaxed">
+            <CardContent className="p-4 lg:p-6">
+              <p className="text-sm text-slate-700 leading-relaxed lg:text-base">
                 {lesson.detailedDescription}
               </p>
             </CardContent>
@@ -132,15 +140,17 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
           {/* Urdu Title Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider lg:text-sm">
                 Urdu Title
               </span>
               <div className="h-px flex-1 bg-linear-to-r from-emerald-100 to-transparent ml-3"></div>
             </div>
-            
+
             <Card className="bg-emerald-50/30 border-emerald-100 shadow-sm">
-              <CardContent className="p-4">
-                <h3 className={`${gulzar.className} text-2xl text-emerald-800 leading-loose text-right font-normal`}>
+              <CardContent className="p-4 lg:p-6">
+                <h3
+                  className={`${gulzar.className} text-2xl text-emerald-800 leading-loose text-right font-normal lg:text-3xl`}
+                >
                   {lesson.urduTitle}
                 </h3>
               </CardContent>
@@ -149,16 +159,19 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
 
           {/* Lesson Details Card */}
           <Card className="border-teal-100 bg-linear-to-br from-teal-50/40 to-emerald-50/40 shadow-sm">
-            <CardContent className="p-4 space-y-3">
-              <p className="text-sm text-slate-700 leading-relaxed">
+            <CardContent className="p-4 space-y-3 lg:p-6">
+              <p className="text-sm text-slate-700 leading-relaxed lg:text-base">
                 {lesson.description}
               </p>
-              
+
               <div className="flex items-center justify-between pt-3 border-t border-teal-100/50">
-                <span className="text-xs font-semibold text-teal-700 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-teal-700 uppercase tracking-wider lg:text-sm">
                   Verses
                 </span>
-                <Badge variant="outline" className="text-teal-700 border-teal-200 bg-white/60">
+                <Badge
+                  variant="outline"
+                  className="text-teal-700 border-teal-200 bg-white/60 lg:text-sm"
+                >
                   {lesson.verses}
                 </Badge>
               </div>
@@ -167,7 +180,7 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
 
           {/* Progress Section */}
           <div className="space-y-2">
-            <div className="flex justify-between text-xs text-slate-500">
+            <div className="flex justify-between text-xs text-slate-500 lg:text-sm">
               <span>Lesson Progress</span>
               <span>25%</span>
             </div>
@@ -176,14 +189,14 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="p-6 pt-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="p-6 pt-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm lg:p-8">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
             <Button
               onClick={onOpenNote}
               variant={hasNote ? "default" : "outline"}
-              className={`h-12 rounded-xl gap-2 transition-all ${
-                hasNote 
-                  ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/25" 
+              className={`h-12 rounded-xl gap-2 transition-all lg:col-span-2 ${
+                hasNote
+                  ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/25"
                   : "border-slate-300 hover:border-emerald-300 hover:bg-emerald-50/50"
               }`}
             >
@@ -195,17 +208,17 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
               <>
                 <Button
                   onClick={onOpenPdf}
-                  className="h-12 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/25 transition-all"
+                  className="h-12 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/25 transition-all lg:col-span-2"
                 >
                   <FileText className="h-4 w-4" />
                   Read PDF
                 </Button>
-                
+
                 <Button
                   onClick={handleDownload}
                   variant={isDownloaded ? "secondary" : "outline"}
                   disabled={downloading}
-                  className="h-12 rounded-xl gap-2 col-span-2 transition-all border-slate-300 hover:border-emerald-300"
+                  className="h-12 rounded-xl gap-2 col-span-2 transition-all border-slate-300 hover:border-emerald-300 lg:col-span-4"
                 >
                   {downloading ? (
                     <>
@@ -215,7 +228,9 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
                   ) : isDownloaded ? (
                     <>
                       <CheckCircle className="h-4 w-4 text-emerald-600" />
-                      <span className="text-emerald-700">Downloaded Successfully</span>
+                      <span className="text-emerald-700">
+                        Downloaded Successfully
+                      </span>
                     </>
                   ) : (
                     <>
@@ -226,9 +241,11 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
                 </Button>
               </>
             ) : (
-              <Card className="col-span-2 border-slate-200/60 bg-slate-50/50">
+              <Card className="col-span-2 border-slate-200/60 bg-slate-50/50 lg:col-span-4">
                 <CardContent className="p-4 text-center">
-                  <p className="text-sm text-slate-500">No PDF material available for this lesson</p>
+                  <p className="text-sm text-slate-500">
+                    No PDF material available for this lesson
+                  </p>
                 </CardContent>
               </Card>
             )}
