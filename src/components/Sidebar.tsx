@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/static-components */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -10,9 +10,11 @@ import {
   BookOpen,
   X,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { CATEGORIES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -41,23 +43,33 @@ const Sidebar: React.FC<SidebarProps> = ({
       <button
         onClick={() => {
           onChangeView(id);
-          onClose(); // Close on mobile click
+          onClose();
         }}
         className={cn(
-          "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+          "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group",
           isActive
-            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_-3px_rgba(16,185,129,0.15)]"
             : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200"
         )}
       >
         <div className="flex items-center gap-3">
-          <Icon size={18} />
+          <Icon
+            size={18}
+            className={cn(
+              isActive
+                ? "text-emerald-400"
+                : "text-zinc-500 group-hover:text-zinc-300"
+            )}
+          />
           <span>{label}</span>
         </div>
         {count > 0 && (
-          <span className="text-xs bg-zinc-800 px-2 py-0.5 rounded-full text-zinc-300">
+          <Badge
+            variant="secondary"
+            className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700 text-[10px] h-5 px-1.5"
+          >
             {count}
-          </span>
+          </Badge>
         )}
       </button>
     );
@@ -66,90 +78,109 @@ const Sidebar: React.FC<SidebarProps> = ({
   const content = (
     <div className="flex flex-col h-full bg-zinc-950 border-r border-zinc-800 w-[280px]">
       {/* Brand */}
-      <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-emerald-500">
-          <BookOpen className="w-6 h-6" />
-          <span className="font-bold text-lg tracking-tight text-zinc-100">
-            Quranic<span className="text-emerald-500">Transform</span>
-          </span>
+      <div className="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+            <BookOpen className="w-5 h-5 text-emerald-500" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold text-sm text-white tracking-wide">
+              Quranic
+            </span>
+            <span className="text-[10px] text-emerald-500 font-medium tracking-widest uppercase">
+              Transformation
+            </span>
+          </div>
         </div>
-        <button onClick={onClose} className="lg:hidden text-zinc-500">
+        <button
+          onClick={onClose}
+          className="lg:hidden text-zinc-500 hover:text-white p-1"
+        >
           <X size={20} />
         </button>
       </div>
 
-      {/* Main Nav */}
-      <div className="p-4 space-y-1">
-        <p className="px-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
-          Menu
-        </p>
-        <NavItem id="home" label="Syllabus" icon={Home} />
-        <NavItem
-          id="notes"
-          label="Reflections"
-          icon={StickyNote}
-          count={savedNotesCount}
-        />
-        <NavItem
-          id="downloads"
-          label="Offline"
-          icon={Download}
-          count={downloadsCount}
-        />
-      </div>
-
-      {/* Categories (Desktop only primarily, handled in header on mobile) */}
-      <div className="p-4 flex-1 overflow-y-auto">
-        <p className="px-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
-          Modules
-        </p>
+      <div className="flex-1 overflow-y-auto py-6 px-4 space-y-8 custom-scrollbar">
+        {/* Main Nav */}
         <div className="space-y-1">
-          {CATEGORIES.filter((c) => c !== "All").map((cat) => (
-            <button
-              key={cat}
-              onClick={() => {
-                onSelectCategory(cat);
-                onChangeView("home");
-                onClose();
-              }}
-              className={cn(
-                "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors group",
-                activeCategory === cat && activeView === "home"
-                  ? "text-zinc-100 bg-zinc-900"
-                  : "text-zinc-400 hover:text-zinc-200"
-              )}
-            >
-              <span>{cat}</span>
-              {activeCategory === cat && activeView === "home" && (
-                <ChevronRight size={14} className="text-emerald-500" />
-              )}
-            </button>
-          ))}
+          <p className="px-3 text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2">
+            Library
+          </p>
+          <NavItem id="home" label="Syllabus" icon={Home} />
+          <NavItem
+            id="notes"
+            label="Reflections"
+            icon={StickyNote}
+            count={savedNotesCount}
+          />
+          <NavItem
+            id="downloads"
+            label="Offline Access"
+            icon={Download}
+            count={downloadsCount}
+          />
+        </div>
+
+        {/* Categories (Desktop) */}
+        <div className="space-y-1 hidden lg:block">
+          <p className="px-3 text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+            Modules <Sparkles size={10} className="text-amber-500" />
+          </p>
+          <div className="space-y-1">
+            {CATEGORIES.filter((c) => c !== "All").map((cat) => (
+              <button
+                key={cat}
+                onClick={() => {
+                  onSelectCategory(cat);
+                  onChangeView("home");
+                }}
+                className={cn(
+                  "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors group border border-transparent",
+                  activeCategory === cat && activeView === "home"
+                    ? "bg-zinc-900 text-white border-zinc-800"
+                    : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/50"
+                )}
+              >
+                <span>{cat}</span>
+                {activeCategory === cat && activeView === "home" && (
+                  <ChevronRight size={14} className="text-emerald-500" />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-zinc-800 text-xs text-zinc-600 text-center">
-        v3.0 Dark Mode
+      <div className="p-4 border-t border-zinc-800 bg-zinc-900/30">
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-full bg-linear-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white text-xs font-bold">
+            U
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs font-medium text-white">Student User</span>
+            <span className="text-[10px] text-zinc-500">v3.0.0 Stable</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 
   return (
     <>
-      {/* Desktop Sidebar: Always visible on large screens */}
-      <div className="hidden lg:block sticky top-0 h-screen overflow-hidden">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block sticky top-0 h-screen z-40">
         {content}
       </div>
 
-      {/* Mobile Sidebar: Drawer */}
+      {/* Mobile Sidebar (Drawer) */}
       {isOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={onClose}
           />
-          <div className="absolute left-0 top-0 h-full animate-in slide-in-from-left duration-200">
+          <div className="absolute left-0 top-0 h-full animate-in slide-in-from-left duration-300 shadow-2xl shadow-black">
             {content}
           </div>
         </div>
