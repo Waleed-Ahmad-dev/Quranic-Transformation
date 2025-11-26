@@ -9,9 +9,16 @@ import {
   FileText,
   CheckCircle,
   Pencil,
+  Bookmark,
+  Share2,
 } from "lucide-react";
 import { Lesson, getCategoryTheme, getDownloadUrl } from "@/lib/constants";
 import { Gulzar } from "next/font/google";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 const gulzar = Gulzar({
   weight: "400",
@@ -60,133 +67,176 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
   };
 
   return (
-    <>
-      <div
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-60 animate-in fade-in duration-200"
-        onClick={onClose}
-      />
-      <div className="fixed inset-x-0 bottom-0 z-70 animate-in slide-in-from-bottom duration-300 bg-white rounded-t-4xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col border-t border-white/20">
-        {/* Header */}
-        <div
-          className="flex justify-center pt-3 pb-1 cursor-pointer"
-          onClick={onClose}
-        >
-          <div className="w-12 h-1.5 bg-slate-200 rounded-full"></div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-6 pb-safe no-scrollbar">
-          <div className="flex justify-between items-start mb-4">
-            <div className="flex-1">
-              <span
-                className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border ${theme.badge}`}
-              >
-                {lesson.part}
-              </span>
-              <h2 className="text-xl font-bold text-slate-800 mt-2 leading-tight">
+    <Dialog open={true} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md p-0 gap-0 bg-white/95 backdrop-blur-sm border-0 rounded-2xl shadow-2xl overflow-hidden">
+        {/* Header with gradient background */}
+        <DialogHeader className="p-6 pb-4 space-y-4 bg-gradient-to-br from-emerald-50 via-teal-50 to-slate-50 border-b border-slate-200/60">
+          <div className="flex justify-between items-start">
+            <div className="space-y-3 flex-1">
+              <div className="flex items-center gap-2">
+                <Badge 
+                  variant="secondary" 
+                  className={`px-3 py-1 text-xs font-semibold uppercase tracking-wider ${theme.badge} border-0`}
+                >
+                  {lesson.part}
+                </Badge>
+                <div className="h-1 w-1 rounded-full bg-slate-300"></div>
+                <span className="text-xs font-medium text-slate-500 flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  {lesson.hours}h
+                </span>
+              </div>
+              
+              <h2 className="text-xl font-bold text-slate-900 leading-tight pr-12">
                 {lesson.topicName}
               </h2>
             </div>
-            <button
+            
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={onClose}
-              className="p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 transition-colors ml-4"
+              className="h-9 w-9 rounded-xl bg-white/80 backdrop-blur-sm border border-slate-200/60 hover:bg-white hover:border-slate-300 transition-all"
             >
-              <X size={20} />
-            </button>
+              <X className="h-4 w-4" />
+            </Button>
           </div>
 
-          <div className="flex items-center gap-4 mb-6 pb-4 border-b border-slate-100">
-            <div className="flex items-center gap-2 text-sm font-semibold text-emerald-700">
-              <BookOpen size={16} />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm font-medium text-emerald-700 bg-white/60 px-3 py-1.5 rounded-lg border border-emerald-100">
+              <BookOpen className="h-4 w-4" />
               <span>{lesson.surahName}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
-              <Clock size={16} />
-              <span>{lesson.hours}h</span>
+            
+            <div className="flex gap-1">
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                <Bookmark className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                <Share2 className="h-4 w-4" />
+              </Button>
             </div>
           </div>
+        </DialogHeader>
 
-          <div className="mb-6">
-            <p className="text-slate-600 leading-relaxed text-sm bg-slate-50 p-4 rounded-xl border border-slate-100">
-              {lesson.detailedDescription}
-            </p>
-          </div>
-
-          <div className="space-y-4 mb-8">
-            <div className="text-right">
-              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">
-                Urdu Title
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 max-h-[60vh]">
+          {/* Description Card */}
+          <Card className="border-slate-200/60 bg-slate-50/50 shadow-sm">
+            <CardContent className="p-4">
+              <p className="text-sm text-slate-700 leading-relaxed">
+                {lesson.detailedDescription}
               </p>
-              {/* Strict Font Application */}
-              <h3
-                className={`${gulzar.className} text-[1.6em] text-emerald-800 leading-loose font-normal`}
-              >
-                {lesson.urduTitle}
-              </h3>
-            </div>
+            </CardContent>
+          </Card>
 
-            <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
-              <p className="text-slate-700 leading-relaxed text-sm">
+          {/* Urdu Title Section */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">
+                Urdu Title
+              </span>
+              <div className="h-px flex-1 bg-gradient-to-r from-emerald-100 to-transparent ml-3"></div>
+            </div>
+            
+            <Card className="bg-emerald-50/30 border-emerald-100 shadow-sm">
+              <CardContent className="p-4">
+                <h3 className={`${gulzar.className} text-2xl text-emerald-800 leading-loose text-right font-normal`}>
+                  {lesson.urduTitle}
+                </h3>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Lesson Details Card */}
+          <Card className="border-teal-100 bg-gradient-to-br from-teal-50/40 to-emerald-50/40 shadow-sm">
+            <CardContent className="p-4 space-y-3">
+              <p className="text-sm text-slate-700 leading-relaxed">
                 {lesson.description}
               </p>
-              <div className="mt-3 pt-3 border-t border-emerald-100 flex justify-between text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
-                <span>Verses</span>
-                <span>{lesson.verses}</span>
+              
+              <div className="flex items-center justify-between pt-3 border-t border-teal-100/50">
+                <span className="text-xs font-semibold text-teal-700 uppercase tracking-wider">
+                  Verses
+                </span>
+                <Badge variant="outline" className="text-teal-700 border-teal-200 bg-white/60">
+                  {lesson.verses}
+                </Badge>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          <div className="grid grid-cols-2 gap-3 pb-8">
-            <button
+          {/* Progress Section */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs text-slate-500">
+              <span>Lesson Progress</span>
+              <span>25%</span>
+            </div>
+            <Progress value={25} className="h-2 bg-slate-200/60" />
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="p-6 pt-4 border-t border-slate-200/60 bg-white/80 backdrop-blur-sm">
+          <div className="grid grid-cols-2 gap-3">
+            <Button
               onClick={onOpenNote}
-              className={`col-span-2 py-3.5 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all active:scale-[0.98] border ${
-                hasNote
-                  ? "bg-amber-50 text-amber-700 border-amber-200"
-                  : "bg-white text-slate-700 border-slate-200 hover:border-emerald-300"
+              variant={hasNote ? "default" : "outline"}
+              className={`h-12 rounded-xl gap-2 transition-all ${
+                hasNote 
+                  ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/25" 
+                  : "border-slate-300 hover:border-emerald-300 hover:bg-emerald-50/50"
               }`}
             >
-              <Edit3 size={18} />
-              {hasNote ? "Edit Reflection" : "Write Reflection"}
-              <Pencil size={14} className="opacity-50" />
-            </button>
+              <Edit3 className="h-4 w-4" />
+              {hasNote ? "Edit Notes" : "Take Notes"}
+            </Button>
 
             {lesson.presentationLink ? (
               <>
-                <button
+                <Button
                   onClick={onOpenPdf}
-                  className="py-3.5 px-4 rounded-xl bg-linear-to-r from-emerald-600 to-teal-700 text-white font-semibold flex flex-col items-center justify-center gap-1 shadow-lg shadow-emerald-500/20 active:scale-[0.98]"
+                  className="h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/25 transition-all"
                 >
-                  <FileText size={20} />
-                  <span className="text-xs">Read PDF</span>
-                </button>
-                <button
+                  <FileText className="h-4 w-4" />
+                  Read PDF
+                </Button>
+                
+                <Button
                   onClick={handleDownload}
-                  className={`py-3.5 px-4 rounded-xl border font-semibold flex flex-col items-center justify-center gap-1 active:scale-[0.98] ${
-                    isDownloaded
-                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                      : "bg-white text-slate-700 border-slate-200"
-                  }`}
+                  variant={isDownloaded ? "secondary" : "outline"}
+                  disabled={downloading}
+                  className="h-12 rounded-xl gap-2 col-span-2 transition-all border-slate-300 hover:border-emerald-300"
                 >
                   {downloading ? (
-                    <div className="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <>
+                      <div className="h-4 w-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+                      <span>Downloading...</span>
+                    </>
                   ) : isDownloaded ? (
-                    <CheckCircle size={20} />
+                    <>
+                      <CheckCircle className="h-4 w-4 text-emerald-600" />
+                      <span className="text-emerald-700">Downloaded Successfully</span>
+                    </>
                   ) : (
-                    <Download size={20} />
+                    <>
+                      <Download className="h-4 w-4" />
+                      <span>Download Material</span>
+                    </>
                   )}
-                  <span className="text-xs">
-                    {isDownloaded ? "Saved" : "Download"}
-                  </span>
-                </button>
+                </Button>
               </>
             ) : (
-              <div className="col-span-2 p-3 text-center text-slate-400 text-sm bg-slate-50 rounded-xl border border-slate-100">
-                No PDF Material
-              </div>
+              <Card className="col-span-2 border-slate-200/60 bg-slate-50/50">
+                <CardContent className="p-4 text-center">
+                  <p className="text-sm text-slate-500">No PDF material available for this lesson</p>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>
-      </div>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 };
 
