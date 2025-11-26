@@ -22,13 +22,13 @@
   --color-ring: var(--ring);
   --radius: 0.5rem;
 
-  /* Typography / Fonts */
+  /* Fonts */
   --font-sans: var(--font-inter);
   --font-gulzar: var(--font-gulzar);
 }
 
-/* HIGH CONTRAST DARK THEME DEFAULT */
 :root {
+  /* Deep Dark Theme - Production Grade */
   --background: #09090b; /* Zinc 950 */
   --foreground: #fafafa; /* Zinc 50 */
   
@@ -51,6 +51,8 @@
   --accent-foreground: #fafafa;
   
   --destructive: #7f1d1d;
+  --destructive-foreground: #fafafa;
+
   --border: #27272a; /* Zinc 800 */
   --input: #27272a;
   --ring: #10b981;
@@ -66,11 +68,33 @@
 }
 
 @layer utilities {
+  /* Hides scrollbar but allows scrolling */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Custom styled scrollbar for text areas */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 3px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+  }
+
+  /* Safe area for iPhone home bar */
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
