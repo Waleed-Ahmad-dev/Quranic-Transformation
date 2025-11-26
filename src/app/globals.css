@@ -21,6 +21,10 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --radius: 0.5rem;
+
+  /* Typography / Fonts */
+  --font-sans: var(--font-inter);
+  --font-gulzar: var(--font-gulzar);
 }
 
 /* HIGH CONTRAST DARK THEME DEFAULT */
