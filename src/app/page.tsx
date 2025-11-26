@@ -58,7 +58,9 @@ export default function Home() {
     localStorage.setItem("qt_notes_v3", JSON.stringify(updatedNotes));
   };
 
-  const handleDownload = (lessonId: number) => {
+  // This just updates the "Saved" status icon, the actual file download logic
+  // is now handled inside LessonDetail.tsx
+  const handleDownloadStatusUpdate = (lessonId: number) => {
     const newSet = new Set(downloadedIds);
     newSet.add(lessonId);
     setDownloadedIds(newSet);
@@ -129,7 +131,7 @@ export default function Home() {
               </h1>
             </div>
 
-            {/* High Contrast Search */}
+            {/* Search */}
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 h-4 w-4" />
               <Input
@@ -198,7 +200,7 @@ export default function Home() {
           onClose={() => setSelectedLesson(null)}
           onOpenNote={() => setIsEditingNote(true)}
           onOpenPdf={() => setIsViewingPdf(true)}
-          onDownload={() => handleDownload(selectedLesson.id)}
+          onDownload={() => handleDownloadStatusUpdate(selectedLesson.id)}
         />
       )}
 
@@ -215,7 +217,7 @@ export default function Home() {
         />
       )}
 
-      {/* 3. PDF Viewer (Rebuilt) */}
+      {/* 3. PDF Viewer */}
       {selectedLesson && isViewingPdf && (
         <PdfViewer
           lesson={selectedLesson}
