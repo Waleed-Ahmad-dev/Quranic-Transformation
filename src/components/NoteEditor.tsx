@@ -13,6 +13,8 @@ import {
   Download,
   Eye,
   PenTool,
+  Save,
+  FileText,
 } from "lucide-react";
 import { Lesson } from "@/lib/constants";
 
@@ -76,9 +78,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   const handleExportPDF = async () => {
     setExporting(true);
     try {
-      // NOTE: Libraries are loaded via script tags in layout.tsx
-      // In a strict production app, you might use npm packages,
-      // but this preserves your existing logic.
       const html2canvas = window.html2canvas;
       const { jsPDF } = window.jspdf;
 
@@ -89,12 +88,6 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       }
 
       await document.fonts.ready;
-
-      // ... [Insert the rest of your PDF Generation Logic here unchanged] ...
-      // For brevity in the response, paste the PDF generation code from your original component
-      // starting from "const loadingOverlay = ..." down to "setExporting(false);"
-
-      // MOCK FOR THIS EXAMPLE (Paste your real logic here):
       alert(
         "PDF Export logic runs here. Ensure window.html2canvas is available."
       );
@@ -111,14 +104,14 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
       return parts.map((part, i) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
-            <strong key={i} className="text-slate-800 font-bold">
+            <strong key={i} className="font-bold text-emerald-700">
               {part.slice(2, -2)}
             </strong>
           );
         }
         if (part.startsWith("*") && part.endsWith("*")) {
           return (
-            <em key={i} className="italic text-emerald-700">
+            <em key={i} className="italic text-emerald-600">
               {part.slice(1, -1)}
             </em>
           );
@@ -129,10 +122,10 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
 
     return (
       <div
-        className={`prose max-w-none ${
+        className={`max-w-none ${
           rtl
-            ? "font-urdu text-right text-xl leading-loose"
-            : "text-left leading-relaxed"
+            ? "font-gulzar text-right text-xl leading-loose"
+            : "font-sans text-left leading-relaxed"
         }`}
         dir={rtl ? "rtl" : "ltr"}
       >
@@ -142,15 +135,20 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
             return (
               <h3
                 key={i}
-                className="text-xl font-display font-bold text-slate-800 mt-6 mb-3 border-l-4 border-emerald-500 pl-3 tracking-tight"
+                className="text-2xl font-bold text-slate-800 mt-8 mb-4 border-r-4 border-emerald-500 pr-4 tracking-tight"
               >
                 {line.replace("## ", "")}
               </h3>
             );
           if (line.startsWith("- "))
             return (
-              <div key={i} className="flex gap-3 ml-1 mb-1 items-start">
-                <span className="text-emerald-500 font-bold text-lg leading-none mt-1">
+              <div
+                key={i}
+                className={`flex gap-3 mb-2 items-start ${
+                  rtl ? "flex-row-reverse" : ""
+                }`}
+              >
+                <span className="text-emerald-500 font-bold text-lg leading-none mt-1 shrink-0">
                   •
                 </span>
                 <span className="text-slate-700">
@@ -159,7 +157,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
               </div>
             );
           return (
-            <p key={i} className="mb-2 text-slate-700">
+            <p key={i} className="mb-3 text-slate-700">
               {parseFormattedText(line)}
             </p>
           );
@@ -169,147 +167,161 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col animate-in slide-in-from-bottom duration-300">
-      <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-r from-emerald-500 to-teal-600 border-b border-emerald-200 z-10">
-        <div className="flex-1 truncate pr-6">
-          <h3 className="font-display font-bold text-2xl text-white leading-tight truncate tracking-tight">
-            {lesson.topicName}
-          </h3>
-          <p className="text-sm text-emerald-100 font-bold uppercase tracking-widest mt-2">
-            {lastSaved ? `Saved ${lastSaved.toLocaleTimeString()}` : "Unsaved"}
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={handleExportPDF}
-            disabled={exporting}
-            className={`flex items-center gap-3 px-5 py-3 rounded-2xl text-base font-display font-bold transition-all border ${
-              exporting
-                ? "bg-white/20 text-emerald-100 border-white/20"
-                : "bg-white text-emerald-700 hover:shadow-lg shadow-emerald-500/30 border-transparent focus:ring-2 focus:ring-white/50"
-            }`}
-          >
-            {exporting ? (
-              <>
-                <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <Download size={20} />
-                <span>Export PDF</span>
-              </>
-            )}
-          </button>
-          <button
-            onClick={onClose}
-            className="p-3 bg-white/20 rounded-full text-white hover:bg-red-500/30 border border-white/20 focus:ring-2 focus:ring-white/50 transition-all duration-300"
-          >
-            <X size={24} />
-          </button>
-        </div>
-      </div>
+    <div className="fixed inset-0 z-50 bg-slate-50/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300">
+      <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-lg shadow-emerald-100 border border-slate-200 w-full max-w-4xl h-[90vh] flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-linear-to-r from-emerald-50 to-teal-50">
+          <div className="flex-1 min-w-0">
+            <h2 className="text-2xl font-bold text-emerald-800 truncate">
+              {lesson.topicName}
+            </h2>
+            <div className="flex items-center gap-4 mt-2">
+              <div className="flex items-center gap-2 text-sm text-emerald-600">
+                <FileText size={16} />
+                <span>Notes Editor</span>
+              </div>
+              {lastSaved && (
+                <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <Save size={14} />
+                  <span>Saved {lastSaved.toLocaleTimeString()}</span>
+                </div>
+              )}
+            </div>
+          </div>
 
-      {activeTab === "write" && (
-        <div className="flex items-center gap-3 px-6 py-4 overflow-x-auto no-scrollbar bg-emerald-50 border-b border-emerald-200">
-          <div className="flex bg-white p-2 rounded-2xl border border-emerald-200">
-            {/* Toolbar Buttons */}
+          <div className="flex items-center gap-3">
             <button
-              onClick={() => insertSyntax("**", "**")}
-              className="p-3 text-emerald-600 hover:bg-emerald-50 rounded-xl"
-              title="Bold"
+              onClick={handleExportPDF}
+              disabled={exporting}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 border ${
+                exporting
+                  ? "bg-slate-100 text-slate-500 border-slate-200"
+                  : "bg-emerald-500 text-white border-emerald-600 hover:bg-emerald-600 hover:shadow-md hover:scale-[1.02] active:scale-95"
+              }`}
             >
-              <Bold size={20} />
+              {exporting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Exporting...</span>
+                </>
+              ) : (
+                <>
+                  <Download size={18} />
+                  <span>Export PDF</span>
+                </>
+              )}
             </button>
+
             <button
-              onClick={() => insertSyntax("*", "*")}
-              className="p-3 text-emerald-600 hover:bg-emerald-50 rounded-xl"
-              title="Italic"
+              onClick={onClose}
+              className="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 bg-white text-slate-600 hover:text-slate-800 hover:bg-slate-50 hover:shadow-sm hover:scale-[1.02] active:scale-95 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              <Italic size={20} />
-            </button>
-            <button
-              onClick={() => insertSyntax("- ")}
-              className="p-3 text-emerald-600 hover:bg-emerald-50 rounded-xl"
-              title="List"
-            >
-              <List size={20} />
-            </button>
-            <button
-              onClick={() => insertSyntax("## ")}
-              className="p-3 text-emerald-600 hover:bg-emerald-50 rounded-xl"
-              title="Heading"
-            >
-              <Type size={20} />
+              <X size={20} />
             </button>
           </div>
-          <div className="h-10 w-[2px] bg-emerald-200 mx-2"></div>
-          <button
-            onClick={() => setIsUrdu(!isUrdu)}
-            className={`px-5 py-3 rounded-2xl text-base font-display font-bold flex items-center gap-3 transition-all border ${
-              isUrdu
-                ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-700"
-                : "bg-white border-emerald-200 text-emerald-600"
-            }`}
-          >
-            {isUrdu ? <AlignRight size={20} /> : <AlignLeft size={20} />}
-            {isUrdu ? "Urdu Mode" : "English Mode"}
-          </button>
         </div>
-      )}
 
-      <div className="flex-1 overflow-hidden relative bg-white">
-        {activeTab === "write" ? (
-          <textarea
-            ref={textareaRef}
-            dir={isUrdu ? "rtl" : "ltr"}
-            className={`w-full h-full p-6 resize-none focus:outline-none bg-transparent text-slate-700 leading-relaxed border border-transparent focus:border-emerald-500/30 focus:ring-2 focus:ring-emerald-500/50 ${
-              isUrdu ? "font-urdu text-xl" : "font-sans text-base"
-            }`}
-            placeholder={
-              isUrdu
-                ? "یہاں اپنے نوٹس لکھیں..."
-                : "Start writing your reflections here..."
-            }
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            autoFocus
-          />
-        ) : (
-          <div className="w-full h-full p-8 overflow-y-auto bg-slate-50">
-            {content.trim() ? (
-              <MarkdownRenderer text={content} rtl={isUrdu} />
-            ) : (
-              <p className="text-emerald-600 italic text-center mt-20 text-xl">
-                Nothing to preview yet.
-              </p>
-            )}
+        {/* Toolbar */}
+        {activeTab === "write" && (
+          <div className="flex items-center gap-4 px-6 py-4 border-b border-slate-200 bg-white/50 backdrop-blur-sm">
+            <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200">
+              {[
+                { icon: Bold, syntax: ["**", "**"], label: "Bold" },
+                { icon: Italic, syntax: ["*", "*"], label: "Italic" },
+                { icon: List, syntax: ["- "], label: "List" },
+                { icon: Type, syntax: ["## "], label: "Heading" },
+              ].map(({ icon: Icon, syntax, label }) => (
+                <button
+                  key={label}
+                  onClick={() => insertSyntax(syntax[0], syntax[1])}
+                  className="p-2 text-slate-600 hover:text-emerald-700 hover:bg-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1"
+                  title={label}
+                >
+                  <Icon size={18} />
+                </button>
+              ))}
+            </div>
+
+            <div className="h-6 w-px bg-slate-300" />
+
+            <button
+              onClick={() => setIsUrdu(!isUrdu)}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition-all duration-200 hover:scale-[1.02] active:scale-95 ${
+                isUrdu
+                  ? "bg-emerald-100 border-emerald-300 text-emerald-800"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              {isUrdu ? <AlignRight size={18} /> : <AlignLeft size={18} />}
+              {isUrdu ? "اردو" : "English"}
+            </button>
           </div>
         )}
-      </div>
 
-      <div className="bg-emerald-50 border-t border-emerald-200 pb-safe">
-        <div className="flex text-center">
-          <button
-            onClick={() => setActiveTab("write")}
-            className={`flex-1 py-5 text-base font-display font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 border-t-2 ${
-              activeTab === "write"
-                ? "text-emerald-700 bg-emerald-500/20 border-emerald-500"
-                : "text-emerald-600 border-transparent hover:bg-white"
-            }`}
-          >
-            <PenTool size={20} /> Write Mode
-          </button>
-          <button
-            onClick={() => setActiveTab("preview")}
-            className={`flex-1 py-5 text-base font-display font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 border-t-2 ${
-              activeTab === "preview"
-                ? "text-emerald-700 bg-emerald-500/20 border-emerald-500"
-                : "text-emerald-600 border-transparent hover:bg-white"
-            }`}
-          >
-            <Eye size={20} /> Preview Mode
-          </button>
+        {/* Content Area */}
+        <div className="flex-1 overflow-hidden bg-linear-to-br from-slate-50/50 to-emerald-50/30">
+          {activeTab === "write" ? (
+            <textarea
+              ref={textareaRef}
+              dir={isUrdu ? "rtl" : "ltr"}
+              className={`w-full h-full p-8 resize-none focus:outline-none bg-transparent text-slate-700 leading-relaxed transition-all duration-200 ${
+                isUrdu
+                  ? "font-gulzar text-xl text-right leading-loose"
+                  : "font-sans text-base leading-relaxed"
+              } placeholder-slate-400 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/30 rounded-lg`}
+              placeholder={
+                isUrdu
+                  ? "یہاں اپنے نوٹس لکھیں..."
+                  : "Start writing your reflections here..."
+              }
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              autoFocus
+            />
+          ) : (
+            <div className="w-full h-full p-8 overflow-y-auto">
+              {content.trim() ? (
+                <MarkdownRenderer text={content} rtl={isUrdu} />
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                  <FileText size={48} className="mb-4 opacity-50" />
+                  <p className="text-lg italic">
+                    {isUrdu
+                      ? "ابھی تک کچھ نہیں لکھا گیا"
+                      : "Nothing to preview yet"}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer Tabs */}
+        <div className="bg-white/90 backdrop-blur-sm border-t border-slate-200">
+          <div className="flex">
+            <button
+              onClick={() => setActiveTab("write")}
+              className={`flex-1 py-4 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 border-t-2 ${
+                activeTab === "write"
+                  ? "text-emerald-700 border-emerald-500 bg-emerald-50/50"
+                  : "text-slate-600 border-transparent hover:text-emerald-600 hover:bg-slate-50/50"
+              } hover:scale-[1.01] active:scale-95`}
+            >
+              <PenTool size={18} />
+              Write Mode
+            </button>
+            <button
+              onClick={() => setActiveTab("preview")}
+              className={`flex-1 py-4 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 border-t-2 ${
+                activeTab === "preview"
+                  ? "text-emerald-700 border-emerald-500 bg-emerald-50/50"
+                  : "text-slate-600 border-transparent hover:text-emerald-600 hover:bg-slate-50/50"
+              } hover:scale-[1.01] active:scale-95`}
+            >
+              <Eye size={18} />
+              Preview Mode
+            </button>
+          </div>
         </div>
       </div>
     </div>
