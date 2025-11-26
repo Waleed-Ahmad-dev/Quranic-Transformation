@@ -427,7 +427,7 @@ export default function Home() {
 
       {/* 3. PDF Viewer Overlay (Overlays Detail) */}
       {selectedLesson && isViewingPdf && (
-        <PdfViewer lesson={lesson} onClose={() => setIsViewingPdf(false)} />
+        <PdfViewer lesson={selectedLesson} onClose={() => setIsViewingPdf(false)} />
       )}
     </div>
   );
