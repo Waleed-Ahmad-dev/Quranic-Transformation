@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Loader2, Mail, CheckCircle2, Github, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle2, Github, AlertCircle } from "lucide-react";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -77,7 +77,7 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md border-zinc-800 bg-zinc-900/50 backdrop-blur-xl shadow-2xl relative z-10">
         <CardHeader className="space-y-3 flex flex-col items-center text-center pb-2">
           {/* Logo */}
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg shadow-emerald-900/20 mb-2">
+          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg shadow-emerald-900/20 mb-2">
             <Image
               src="/favicon.ico"
               alt="Logo"
