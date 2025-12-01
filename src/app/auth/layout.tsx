@@ -27,10 +27,22 @@ export default function AuthLayout({
     const fetchVerse = async () => {
       try {
         setLoading(true);
-        // Fetches a random Ayah with Arabic (quran-uthmani) and English (en.sahih)
+
+        // 1. Generate a random timestamp to prevent browser/CDN caching
+        const timestamp = new Date().getTime();
+
+        // 2. Add 'cache: no-store' to ensure a fresh fetch every time
         const res = await fetch(
-          "https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.sahih"
+          `https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.sahih?t=${timestamp}`,
+          {
+            cache: "no-store",
+            headers: {
+              Pragma: "no-cache",
+              "Cache-Control": "no-cache",
+            },
+          }
         );
+
         const data = await res.json();
 
         if (data.data) {
@@ -84,7 +96,7 @@ export default function AuthLayout({
             className="object-cover opacity-20 mix-blend-overlay"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-zinc-950/20" />
+          <div className="absolute inset-0 bg-linear-to-t from-zinc-950 via-zinc-950/80 to-zinc-950/20" />
         </div>
 
         {/* Content Overlay */}
@@ -94,7 +106,7 @@ export default function AuthLayout({
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center backdrop-blur-md shadow-[0_0_30px_-5px_rgba(16,185,129,0.3)]"
+            className="w-16 h-16 mx-auto rounded-2xl bg-linear-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center backdrop-blur-md shadow-[0_0_30px_-5px_rgba(16,185,129,0.3)]"
           >
             <BookOpen className="w-8 h-8 text-emerald-400" />
           </motion.div>
@@ -126,7 +138,7 @@ export default function AuthLayout({
                 </p>
 
                 {/* Divider */}
-                <div className="w-24 h-px bg-gradient-to-r from-transparent via-zinc-700 to-transparent mx-auto" />
+                <div className="w-24 h-px bg-linear-to-r from-transparent via-zinc-700 to-transparent mx-auto" />
 
                 {/* English Text */}
                 <p className="text-xl md:text-2xl font-gulzar text-white/90 leading-relaxed italic">
@@ -150,7 +162,7 @@ export default function AuthLayout({
 
         {/* Mobile Logo */}
         <div className="lg:hidden mb-8 absolute top-8">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg shadow-emerald-900/20">
+          <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg shadow-emerald-900/20">
             <Image
               src="/favicon.ico"
               alt="Logo"
