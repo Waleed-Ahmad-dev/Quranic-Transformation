@@ -12,6 +12,7 @@
 - **🔍 Smart Search & Filter**: Instantly find lessons by topic, Surah, or category.
 - **📝 Personal Reflections**: Write and save notes for each lesson. Supports **Urdu** and **English** typing modes.
 - **💾 Offline Tracking**: Mark lessons as "Downloaded" to track your offline study progress.
+- **🔐 Secure Authentication**: Complete user system with Login, Registration, and Password Recovery.
 - **📄 Integrated PDF Viewer**: Read lesson presentations directly within the app without leaving the interface.
 - **🌙 Premium Dark Mode**: A beautiful, eye-friendly dark interface designed for focused reading.
 - **📱 Fully Responsive**: Optimized experience for Mobile, Tablet, and Desktop devices.
@@ -41,8 +42,11 @@ For a detailed technical breakdown, please refer to:
 ```bash
 src/
 ├── app/                 # Main Application Logic
+│   ├── auth/            # Authentication Pages (Login, Register, etc.)
+│   └── api/             # Backend API Routes
 ├── components/          # UI Components (LessonCard, Sidebar, etc.)
-└── lib/                 # Data Constants & Utilities
+├── lib/                 # Data Constants & Utilities
+└── middleware.ts        # Route Protection & Session Management
 ```
 
 ---

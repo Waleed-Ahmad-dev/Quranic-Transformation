@@ -9,6 +9,8 @@ The project follows the standard **Next.js App Router** architecture.
 ```
 src/
 ├── app/                 # App Router pages and layouts
+│   ├── api/             # Backend API Routes (Auth, etc.)
+│   ├── auth/            # Authentication Pages (Login, Register)
 │   ├── layout.tsx       # Root layout (fonts, metadata)
 │   ├── page.tsx         # Main application logic (Dashboard)
 │   └── globals.css      # Global styles and Tailwind directives
@@ -19,9 +21,13 @@ src/
 │   ├── NoteEditor.tsx   # Text editor for reflections
 │   ├── PdfViewer.tsx    # Embedded PDF viewer
 │   └── Sidebar.tsx      # Navigation and filtering sidebar
-└── lib/                 # Utilities and Constants
-    ├── constants.ts     # Static data (Syllabus) & Types
-    └── utils.ts         # Helper functions (Tailwind merge)
+├── lib/                 # Utilities and Constants
+│   ├── constants.ts     # Static data (Syllabus) & Types
+│   ├── session.ts       # JWT Session Management
+│   ├── tokens.ts        # Verification & Reset Tokens
+│   ├── mail.ts          # Email Sending Logic
+│   └── utils.ts         # Helper functions (Tailwind merge)
+└── middleware.ts        # Route Protection & Session Management
 ```
 
 ## 🧠 Core Logic & State Management
@@ -77,6 +83,20 @@ A focused writing environment.
 Embeds Google Drive PDFs directly into the app.
 
 - **Implementation**: Uses an `iframe` with the Google Drive preview URL.
+
+## 🔐 Authentication & Security
+
+The project implements a custom authentication system using **JWT** and **Next.js Middleware**.
+
+- **Session Management**: Stateless JWT sessions stored in HTTP-only cookies.
+- **Middleware**: `src/middleware.ts` handles route protection and session validation.
+- **Security**: Passwords are hashed using `bcryptjs`.
+- **Flows**:
+  - **Registration**: Email verification required.
+  - **Login**: Secure cookie setting.
+  - **Password Reset**: Token-based secure reset flow.
+
+For a deep dive into the Auth module, see [Auth Module Documentation](AUTH_MODULE.md).
 
 ## 🎨 Design System
 
