@@ -28,20 +28,17 @@ export default function AuthLayout({
       try {
         setLoading(true);
 
-        // 1. Generate a random timestamp to prevent browser/CDN caching
+        // 1. Generate a random timestamp. This is enough to bust the cache.
         const timestamp = new Date().getTime();
 
-        // 2. Add 'cache: no-store' to ensure a fresh fetch every time
+        // 2. Simple fetch. No custom headers.
         const res = await fetch(
-          `https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.sahih?t=${timestamp}`,
-          {
-            cache: "no-store",
-            headers: {
-              Pragma: "no-cache",
-              "Cache-Control": "no-cache",
-            },
-          }
+          `https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.sahih?t=${timestamp}`
         );
+
+        if (!res.ok) {
+          throw new Error(`API responded with status: ${res.status}`);
+        }
 
         const data = await res.json();
 
@@ -57,8 +54,8 @@ export default function AuthLayout({
           });
         }
       } catch (error) {
-        console.error("Failed to fetch verse", error);
-        // Fallback if API fails
+        console.error("Failed to fetch verse:", error);
+        // Fallback
         setVerse({
           text: "رَّبِّ زِدْنِى عِلْمًا",
           translation: "My Lord, increase me in knowledge.",
