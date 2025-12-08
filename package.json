@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start  -p 4000",
     "lint": "eslint",
-    "prisma:seed": "ts-node src/prisma/seed.ts"
+    "prisma:seed": "ts-node /prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^7.0.1",
