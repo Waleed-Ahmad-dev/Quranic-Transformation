@@ -2,7 +2,10 @@
 
 ## Overview
 
-The Authentication module in **Quranic-Transformation** is a custom implementation using **JWT (JSON Web Tokens)** for session management. It leverages `jose` for token handling, `bcryptjs` for password hashing, and Next.js Middleware for route protection.
+The Authentication module in **Quranic-Transformation** is a custom implementation using **JWT (JSON Web Tokens)** for session management. It leverages `jose` for token handling, `bcryptjs` for password hashing.
+
+> [!NOTE]
+> The module currently provides the foundation for authentication (libs, API, pages). Full route protection via Middleware and the Dashboard implementations are **Planned / In Progress**.
 
 ## Architecture
 
@@ -39,7 +42,10 @@ Handles auxiliary tokens for email verification and password resets.
 - `generateVerificationToken(email)`: Creates a UUID token for email verification.
 - `generatePasswordResetToken(email)`: Creates a UUID token for password resets.
 
-### 3. Middleware (`src/middleware.ts`)
+### 3. Middleware (`src/middleware.ts`) (Planned)
+
+> [!WARNING]
+> This component is currently **Planned**. The file does not yet exist in the codebase.
 
 Protects routes based on authentication status.
 
