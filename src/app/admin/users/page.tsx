@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Shield, ShieldAlert, Ban, MoreVertical } from "lucide-react";
+import { Shield, ShieldAlert, Ban } from "lucide-react";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
