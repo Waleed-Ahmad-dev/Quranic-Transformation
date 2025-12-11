@@ -28,7 +28,7 @@ export async function PATCH(
     if (targetUser.role === "ADMIN" && targetUser.id !== session.userId) {
        // Allow self-demotion? Probably safer to block modifying any admin other than potentially self (but usually blocked too).
        // User requirement: "I can only change their role not of any other admin"
-       return NextResponse.json({ error: "Cannot modify another Admin" }, { status: 403 });
+      return NextResponse.json({ error: "Cannot modify another Admin" }, { status: 403 });
     }
 
     const updatedUser = await prisma.user.update({
