@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { getSession } from "@/lib/session";
 import * as z from "zod";
+import prisma from "../../../../lib/prisma";
+import { getSession } from "../../../../lib/session";
 
 const UpdateReflectionSchema = z.object({
   content: z.string().min(1),
