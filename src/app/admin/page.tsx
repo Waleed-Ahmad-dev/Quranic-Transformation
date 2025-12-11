@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/static-components */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/lib/prisma";
 import { Users, BookOpen, ShieldBan, UserCheck } from "lucide-react";
 
