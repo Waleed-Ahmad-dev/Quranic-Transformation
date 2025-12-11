@@ -36,7 +36,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    // 3. Check Email Verification (Optional but recommended)
+    // 3. Check if User is Banned
+    const bannedUser = await prisma.bannedUser.findUnique({
+      where: { email: user.email },
+    });
+
+    if (bannedUser) {
+      return NextResponse.json(
+        { error: "Your account has been banned." },
+        { status: 403 }
+      );
+    }
+
+    // 4. Check Email Verification (Optional but recommended)
     if (!user.emailVerified) {
        return NextResponse.json({ error: "Please verify your email first" }, { status: 403 });
     }

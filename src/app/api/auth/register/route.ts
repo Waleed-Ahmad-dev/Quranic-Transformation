@@ -39,6 +39,18 @@ export async function POST(req: Request) {
       );
     }
 
+    // 2.5 Check if User is Banned
+    const bannedUser = await prisma.bannedUser.findUnique({
+      where: { email },
+    });
+
+    if (bannedUser) {
+      return NextResponse.json(
+        { error: "This email is banned from registration." },
+        { status: 403 }
+      );
+    }
+
     // 3. Hash Password
     const hashedPassword = await bcrypt.hash(password, 10);
 
