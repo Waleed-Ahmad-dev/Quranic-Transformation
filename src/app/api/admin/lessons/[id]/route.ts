@@ -52,6 +52,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("Delete Lesson Error:", error);
     return NextResponse.json({ error: "Failed to delete lesson" }, { status: 500 });
   }
 }
