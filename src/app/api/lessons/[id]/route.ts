@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
@@ -21,7 +22,7 @@ export async function GET(
     const lessonId = parseInt(id);
 
     if (isNaN(lessonId)) {
-       return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
     const lesson = await prisma.lesson.findUnique({
