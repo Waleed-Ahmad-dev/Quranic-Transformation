@@ -166,17 +166,11 @@ export default function Dashboard() {
     if (searchTerm) {
       const lower = searchTerm.toLowerCase();
       data = data.filter(
-        (l) =>
-          l.topicName?.toLowerCase().includes(lower) || // title -> topicName mapping in interface?
-          // Wait, 'Lesson' interface in constants has topicName. DB has title.
-          // I need to align them.
-          // Fetching from DB returns object with 'title', 'urduTitle'...
-          // My component expects 'Lesson' interface.
-          // I should map DB fields to UI fields if they differ.
-          // DB: title. UI: topicName.
-          (l as any).title?.toLowerCase().includes(lower) ||
-          l.surahName?.toLowerCase().includes(lower) || // DB might not have surahName, has surahReference
-          l.urduTitle?.includes(searchTerm)
+        (l: any) =>
+          (l.title && l.title.toLowerCase().includes(lower)) ||
+          (l.surahReference &&
+            l.surahReference.toLowerCase().includes(lower)) ||
+          (l.urduTitle && l.urduTitle.includes(searchTerm))
       );
     }
     return data;
@@ -273,27 +267,38 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-              {filteredData.map((lesson) => (
-                <LessonCard
-                  key={lesson.id}
-                  lesson={
-                    // Mapping DB data to Component Interface
-                    {
-                      ...lesson,
-                      topicName: (lesson as any).title,
-                      // Ensure other fields are present or optional in LessonCard
-                    }
-                  }
-                  hasNote={!!notes[lesson.id]?.content}
-                  isDownloaded={downloadedIds.has(lesson.id)} // Maps to Bookmarks now
-                  onClick={() =>
-                    setSelectedLesson({
-                      ...lesson,
-                      topicName: (lesson as any).title,
-                    })
-                  }
-                />
-              ))}
+              {filteredData.map((lesson: any) => {
+                // Adapt Prisma Lesson to UI Lesson Interface
+                const uiLesson: Lesson = {
+                  ...lesson,
+                  topicName: lesson.title,
+                  // Parse surahName from surahReference if possible, or fallback
+                  // Seed format: "Surah Al-Asr (103)" -> Name: "Al-Asr"
+                  // If surahReference is null, use empty string
+                  surahName: lesson.surahReference
+                    ? lesson.surahReference.replace(/Surah\s+| \(.*\)/g, "")
+                    : "",
+                  // detailedDescription might be in lesson if schema has it (we added it to seed, assume schema has it or we added it to schema?)
+                  // Wait, did I add detailedDescription to Schema?
+                  // Checked schema.prisma in Step 11:
+                  // 101: detailedDescription String? @db.Text
+                  // Yes it is there.
+                  detailedDescription: lesson.detailedDescription || "",
+                  tags: [], // Schema doesn't have tags, strictly.
+                  // Constants Lesson interface has `tags: string[]`.
+                  // I will pass empty array or mapped if I had them.
+                };
+
+                return (
+                  <LessonCard
+                    key={lesson.id}
+                    lesson={uiLesson}
+                    hasNote={!!notes[lesson.id]?.content}
+                    isDownloaded={downloadedIds.has(lesson.id)}
+                    onClick={() => setSelectedLesson(uiLesson)}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
