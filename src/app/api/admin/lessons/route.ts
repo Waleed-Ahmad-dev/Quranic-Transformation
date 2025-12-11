@@ -13,6 +13,7 @@ export async function GET() {
     });
     return NextResponse.json({ lessons });
   } catch (error) {
+    console.error("Get Lessons Error:", error);
     return NextResponse.json({ error: "Failed to fetch lessons" }, { status: 500 });
   }
 }
