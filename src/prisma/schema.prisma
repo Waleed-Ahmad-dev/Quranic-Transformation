@@ -111,6 +111,9 @@ model Lesson {
   presentationLink String?
   audioUrl         String? // New: For the audio player
 
+  // Access Control
+  minRole UserRole @default(USER) // USER or ADMIN
+
   // Relations
   progress    UserProgress[]
   reflections Reflection[]
@@ -209,4 +212,12 @@ model UserBadge {
   badge Badge @relation(fields: [badgeId], references: [id])
 
   @@id([userId, badgeId])
+}
+
+model BannedUser {
+  id       String   @id @default(uuid())
+  email    String   @unique
+  reason   String?
+  bannedBy String   @default("SYSTEM") // ID of admin who banned
+  bannedAt DateTime @default(now())
 }
