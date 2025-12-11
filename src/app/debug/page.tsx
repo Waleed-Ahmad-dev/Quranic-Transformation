@@ -33,7 +33,7 @@ export default async function DebugPage() {
             </p>
           </div>
         ) : (
-          <p className="text-red-500">No 'session' cookie found.</p>
+          <p className="text-red-500">No &apos;session&apos; cookie found.</p>
         )}
       </div>
 
