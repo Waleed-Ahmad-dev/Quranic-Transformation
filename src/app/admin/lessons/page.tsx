@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Edit2, Trash2, Plus, ArrowLeft } from "lucide-react";
+import { Edit2, Trash2, Plus, ArrowLeft } from "lucide-react";
 
 export default function LessonsPage() {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const [lessons, setLessons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingLesson, setEditingLesson] = useState<any | null>(null);
+
   const [isEditing, setIsEditing] = useState(false);
 
   const fetchLessons = async () => {
