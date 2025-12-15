@@ -9,7 +9,6 @@ import {
   Search,
   Loader2,
   User as UserIcon,
-  CheckCircle2,
 } from "lucide-react";
 
 // Shadcn UI Imports
