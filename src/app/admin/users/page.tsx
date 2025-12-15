@@ -295,7 +295,7 @@ export default function UsersPage() {
                             undefined,
                             {
                               year: "numeric",
-                              month: "medium",
+                              month: "short",
                               day: "numeric",
                             }
                           )}
