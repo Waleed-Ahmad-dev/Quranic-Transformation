@@ -24,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type SidebarProps = React.HTMLAttributes<HTMLDivElement>
+type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
 export default function AdminSidebar({ className }: SidebarProps) {
   const pathname = usePathname();
@@ -32,8 +32,7 @@ export default function AdminSidebar({ className }: SidebarProps) {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      router.push("/login");
+      router.push("/dashboard");
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -141,7 +140,7 @@ export default function AdminSidebar({ className }: SidebarProps) {
               onClick={handleLogout}
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Log out
+              Exit
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
