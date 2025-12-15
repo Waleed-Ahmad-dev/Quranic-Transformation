@@ -1,14 +1,78 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useEffect, useState } from "react";
+import {
+  Shield,
+  ShieldAlert,
+  Ban,
+  MoreVertical,
+  Search,
+  Loader2,
+  User as UserIcon,
+  CheckCircle2,
+} from "lucide-react";
+
+// Shadcn UI Imports
 import { Badge } from "@/components/ui/badge";
-import { Shield, ShieldAlert, Ban } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+// Type Definitions
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN";
+  createdAt: string;
+  avatarUrl?: string; // Optional if your API returns it
+}
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Action States
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  // Ban Dialog State
+  const [isBanDialogOpen, setIsBanDialogOpen] = useState(false);
+  const [userToBan, setUserToBan] = useState<User | null>(null);
+  const [banReason, setBanReason] = useState("");
 
   const fetchUsers = async () => {
     try {
@@ -28,13 +92,29 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  const handleRoleUpdate = async (userId: string, currentRole: string) => {
-    const newRole = currentRole === "USER" ? "ADMIN" : "USER";
-    if (!confirm(`Are you sure you want to change role to ${newRole}?`)) return;
+  // Filter users based on search
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    setActionLoading(userId);
+  const handleRoleUpdate = async (user: User) => {
+    const newRole = user.role === "USER" ? "ADMIN" : "USER";
+
+    // Using native confirm for critical boolean actions is often safer/clearer
+    // than a custom modal if you want to avoid complex state,
+    // but a Dialog is more "enterprise". Sticking to confirm for speed here.
+    if (
+      !confirm(
+        `Are you sure you want to change ${user.name}'s role to ${newRole}?`
+      )
+    )
+      return;
+
+    setActionLoading(user.id);
     try {
-      const res = await fetch(`/api/admin/users/${userId}/role`, {
+      const res = await fetch(`/api/admin/users/${user.id}/role`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: newRole }),
@@ -42,8 +122,8 @@ export default function UsersPage() {
       const data = await res.json();
 
       if (res.ok) {
-        setUsers(
-          users.map((u) => (u.id === userId ? { ...u, role: newRole } : u))
+        setUsers((prev) =>
+          prev.map((u) => (u.id === user.id ? { ...u, role: newRole } : u))
         );
       } else {
         alert(data.error || "Failed to update role");
@@ -56,22 +136,30 @@ export default function UsersPage() {
     }
   };
 
-  const handleBan = async (email: string) => {
-    const reason = prompt("Enter ban reason (optional):");
-    if (reason === null) return; // Cancelled
+  const openBanDialog = (user: User) => {
+    setUserToBan(user);
+    setBanReason("");
+    setIsBanDialogOpen(true);
+  };
 
-    setActionLoading(email);
+  const handleBanSubmit = async () => {
+    if (!userToBan) return;
+
+    setActionLoading(userToBan.id);
+    setIsBanDialogOpen(false); // Close immediately for better UX, handle error if fails
+
     try {
       const res = await fetch("/api/admin/users/ban", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, reason }),
+        body: JSON.stringify({ email: userToBan.email, reason: banReason }),
       });
       const data = await res.json();
 
       if (res.ok) {
-        alert("User banned successfully");
-        // Optionally refresh list or mark visually, keeping it simple
+        // Optimistically remove user or mark as banned.
+        // Assuming we remove them from the active list:
+        setUsers((prev) => prev.filter((u) => u.id !== userToBan.id));
       } else {
         alert(data.error || "Failed to ban user");
       }
@@ -80,92 +168,223 @@ export default function UsersPage() {
       alert("Error banning user");
     } finally {
       setActionLoading(null);
+      setUserToBan(null);
     }
   };
 
-  if (loading) return <div className="text-white">Loading users...</div>;
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-[50vh] w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">User Management</h1>
-        <span className="text-sm text-zinc-500">{users.length} Users</span>
+    <div className="space-y-6 p-1">
+      {/* Header Section */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Users</h1>
+          <p className="text-muted-foreground">
+            Manage user access, roles, and account status.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="px-3 py-1 text-sm">
+            Total: {users.length}
+          </Badge>
+          <Badge variant="secondary" className="px-3 py-1 text-sm">
+            Admins: {users.filter((u) => u.role === "ADMIN").length}
+          </Badge>
+        </div>
       </div>
 
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-        <table className="w-full text-left text-sm text-zinc-400">
-          <thead className="bg-zinc-950 text-zinc-200 uppercase font-medium border-b border-zinc-800">
-            <tr>
-              <th className="px-6 py-4">User</th>
-              <th className="px-6 py-4">Role</th>
-              <th className="px-6 py-4">Joined</th>
-              <th className="px-6 py-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-zinc-800">
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                className="hover:bg-zinc-800/50 transition-colors"
-              >
-                <td className="px-6 py-4">
-                  <div className="flex flex-col">
-                    <span className="text-white font-medium">{user.name}</span>
-                    <span className="text-xs">{user.email}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    {user.role === "ADMIN" ? (
-                      <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/20 hover:bg-purple-500/30">
-                        Admin
-                      </Badge>
-                    ) : (
-                      <Badge
-                        variant="secondary"
-                        className="bg-zinc-800 text-zinc-400 border-zinc-700"
-                      >
-                        User
-                      </Badge>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <button
-                      onClick={() => handleRoleUpdate(user.id, user.role)}
-                      disabled={actionLoading === user.id}
-                      className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition-colors"
-                      title={
-                        user.role === "ADMIN"
-                          ? "Demote to User"
-                          : "Promote to Admin"
-                      }
+      {/* Main Content Card */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Registered Users</CardTitle>
+              <CardDescription>
+                A list of all users currently registered in the system.
+              </CardDescription>
+            </div>
+          </div>
+          <div className="pt-4">
+            <div className="relative max-w-sm">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by name or email..."
+                className="pl-9"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[80px]">Avatar</TableHead>
+                  <TableHead>User Details</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Joined Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredUsers.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="h-24 text-center text-muted-foreground"
                     >
-                      {user.role === "ADMIN" ? (
-                        <ShieldAlert size={16} />
-                      ) : (
-                        <Shield size={16} />
-                      )}
-                    </button>
-                    <button
-                      onClick={() => handleBan(user.email)}
-                      disabled={actionLoading === user.email}
-                      className="p-2 hover:bg-red-500/10 rounded-lg text-zinc-400 hover:text-red-500 transition-colors"
-                      title="Ban User"
-                    >
-                      <Ban size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                      No users found matching your search.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredUsers.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        <Avatar className="h-9 w-9">
+                          <AvatarImage src={user.avatarUrl} alt={user.name} />
+                          <AvatarFallback className="bg-primary/10 text-primary">
+                            {getInitials(user.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="font-medium">{user.name}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {user.email}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {user.role === "ADMIN" ? (
+                          <Badge
+                            variant="default"
+                            className="bg-purple-600 hover:bg-purple-700"
+                          >
+                            <ShieldAlert className="mr-1 h-3 w-3" />
+                            Admin
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-zinc-500">
+                            <UserIcon className="mr-1 h-3 w-3" />
+                            User
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-muted-foreground text-sm">
+                          {new Date(user.createdAt).toLocaleDateString(
+                            undefined,
+                            {
+                              year: "numeric",
+                              month: "medium",
+                              day: "numeric",
+                            }
+                          )}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              disabled={actionLoading === user.id}
+                            >
+                              {actionLoading === user.id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <MoreVertical className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => handleRoleUpdate(user)}
+                            >
+                              {user.role === "ADMIN" ? (
+                                <>
+                                  <Shield className="mr-2 h-4 w-4" />
+                                  Demote to User
+                                </>
+                              ) : (
+                                <>
+                                  <ShieldAlert className="mr-2 h-4 w-4" />
+                                  Promote to Admin
+                                </>
+                              )}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="text-destructive focus:text-destructive"
+                              onClick={() => openBanDialog(user)}
+                            >
+                              <Ban className="mr-2 h-4 w-4" />
+                              Ban User
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Ban Confirmation Dialog */}
+      <Dialog open={isBanDialogOpen} onOpenChange={setIsBanDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Ban User</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to ban <strong>{userToBan?.name}</strong>?
+              This action will prevent them from logging in.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="reason">Reason for ban (optional)</Label>
+              <Textarea
+                id="reason"
+                placeholder="Violation of terms..."
+                value={banReason}
+                onChange={(e) => setBanReason(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsBanDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleBanSubmit}>
+              Confirm Ban
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
