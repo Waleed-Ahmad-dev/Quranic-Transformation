@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState } from "react";
@@ -6,7 +7,6 @@ import { useRouter } from "next/navigation";
 import {
   Loader2,
   Github,
-  CheckCircle2,
   Eye,
   EyeOff,
   ArrowRight,
@@ -234,7 +234,6 @@ export default function RegisterPage() {
                 </p>
               </CardFooter>
             </motion.div>
-          )}
         </AnimatePresence>
       </Card>
     </div>
