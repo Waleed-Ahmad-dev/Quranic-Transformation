@@ -4,7 +4,11 @@ const domain = process.env.NEXT_PUBLIC_APP_URL;
 const EMAIL_USER = process.env.NEXT_PUBLIC_EMAIL_USER;
 const EMAIL_PASS = process.env.NEXT_PUBLIC_EMAIL_PASS;
 
-// OPTIMIZATION: Create transporter once and reuse (connection pooling)
+console.log("📧 [Mail Lib] Initializing email configuration...");
+console.log("📧 [Mail Lib] Domain:", domain);
+console.log("📧 [Mail Lib] Email User present:", !!EMAIL_USER);
+console.log("📧 [Mail Lib] Email Pass present:", !!EMAIL_PASS);
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -13,18 +17,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// OPTIMIZATION: Generic email sending function to avoid code duplication
 interface SendEmailParams {
   email: string;
   subject: string;
   html: string;
 }
 
-/**
- * OPTIMIZATION: Generic email sender to handle common sending logic
- * Uses fire-and-forget pattern to prevent blocking the request.
- */
 const sendEmail = async ({ email, subject, html }: SendEmailParams): Promise<boolean> => {
+  console.log(`📧 [Mail Lib] Preparing to send email to: ${email} | Subject: ${subject}`);
   const mailOptions = {
     from: `"Quranic Transformation" <${EMAIL_USER}>`,
     to: email,
@@ -33,19 +33,17 @@ const sendEmail = async ({ email, subject, html }: SendEmailParams): Promise<boo
   };
 
   try {
-    // OPTIMIZATION: Use sendMail with callback for non-blocking operation
-    // This allows the event loop to continue while email is sending
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error(`❌ Error sending email to ${email}:`, error);
+        console.error(`❌ [Mail Lib] Error sending email to ${email}:`, error);
       } else {
-        console.log(`✅ Email sent to ${email}: ${info.messageId}`);
+        console.log(`✅ [Mail Lib] Email sent successfully to ${email}. MessageID: ${info.messageId}`);
       }
     });
-    // OPTIMIZATION: Return immediately without waiting for SMTP response
+    console.log(`🚀 [Mail Lib] Email payload handed off to Nodemailer (Non-blocking)`);
     return true;
   } catch (error) {
-    console.error(`❌ Synchronous error in sendEmail for ${email}:`, error);
+    console.error(`❌ [Mail Lib] Synchronous setup error for ${email}:`, error);
     return false;
   }
 };
