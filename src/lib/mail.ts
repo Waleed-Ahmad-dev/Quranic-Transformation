@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
-const EMAIL_USER = process.env.EMAIL_USER;
-const EMAIL_PASS = process.env.EMAIL_PASS;
+const EMAIL_USER = process.env.NEXT_PUBLIC_EMAIL_USER;
+const EMAIL_PASS = process.env.NEXT_PUBLIC_EMAIL_PASS;
 
 // OPTIMIZATION: Create transporter once and reuse (connection pooling)
 const transporter = nodemailer.createTransport({
