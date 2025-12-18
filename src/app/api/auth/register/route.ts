@@ -82,8 +82,18 @@ export async function POST(req: Request) {
     const verificationToken = await generateVerificationToken(newUser.email!);
     
     console.log("📝 [Register API] Sending verification email...");
-    await sendVerificationEmail(verificationToken.email, verificationToken.token);
-    console.log("✅ [Register API] Email sending triggered (async)");
+    const emailSent = await sendVerificationEmail(verificationToken.email, verificationToken.token);
+    
+    if (!emailSent) {
+      console.error("❌ [Register API] Email sending failed. Rolling back user creation...");
+      await prisma.user.delete({ where: { id: newUser.id } });
+      return NextResponse.json(
+        { error: "Failed to send verification email. Please try again." },
+        { status: 500 }
+      );
+    }
+
+    console.log("✅ [Register API] Email sent successfully");
 
     return NextResponse.json(
       { success: true, message: "User registered. Please check your email." },
