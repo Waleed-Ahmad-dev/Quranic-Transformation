@@ -10,7 +10,9 @@ console.log("📧 [Mail Lib] Email User present:", !!EMAIL_USER);
 console.log("📧 [Mail Lib] Email Pass present:", !!EMAIL_PASS);
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: EMAIL_USER,
     pass: EMAIL_PASS,
