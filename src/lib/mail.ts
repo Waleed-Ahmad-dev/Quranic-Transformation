@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 const EMAIL_USER = process.env.EMAIL_USER;
-const EMAIL_PASS = process.env.MAIL_PASS;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 
 console.log("📧 [Mail Lib] Initializing email configuration...");
 console.log("📧 [Mail Lib] Domain:", domain);
@@ -33,17 +33,11 @@ const sendEmail = async ({ email, subject, html }: SendEmailParams): Promise<boo
   };
 
   try {
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error(`❌ [Mail Lib] Error sending email to ${email}:`, error);
-      } else {
-        console.log(`✅ [Mail Lib] Email sent successfully to ${email}. MessageID: ${info.messageId}`);
-      }
-    });
-    console.log(`🚀 [Mail Lib] Email payload handed off to Nodemailer (Non-blocking)`);
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [Mail Lib] Email sent successfully to ${email}. MessageID: ${info.messageId}`);
     return true;
   } catch (error) {
-    console.error(`❌ [Mail Lib] Synchronous setup error for ${email}:`, error);
+    console.error(`❌ [Mail Lib] Error sending email to ${email}:`, error);
     return false;
   }
 };
