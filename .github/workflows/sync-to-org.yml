@@ -17,6 +17,9 @@ jobs:
 
       - name: Push to Entrpryz Organization
         uses: cpina/github-action-push-to-another-repository@main
+        with:
+          fetch-depth: 0
+          persist-credentials: false # <--- ADD THIS LINE
         env:
           API_TOKEN_GITHUB: ${{ secrets.ENTRPRYZ_SYNC_TOKEN }}
         with:
