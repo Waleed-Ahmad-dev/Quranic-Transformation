@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { title, part, minRole, ...otherData } = body;
+    const { title, part, minRole, resources, ...otherData } = body;
 
     if (!title || !part) {
       return NextResponse.json({ error: "Title and Part are required" }, { status: 400 });
