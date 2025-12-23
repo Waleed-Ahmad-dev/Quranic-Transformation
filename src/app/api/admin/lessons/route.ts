@@ -10,6 +10,7 @@ export async function GET() {
   try {
     const lessons = await prisma.lesson.findMany({
       orderBy: { id: "asc" },
+      include: { resources: true }, // <--- CHANGED: Include resources
     });
     return NextResponse.json({ lessons });
   } catch (error) {
@@ -17,6 +18,8 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to fetch lessons" }, { status: 500 });
   }
 }
+
+// ... POST method remains the same ...
 
 export async function POST(req: Request) {
   const { error } = await requireAdmin();
