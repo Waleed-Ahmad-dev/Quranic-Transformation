@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   X,
   Clock,
@@ -41,6 +41,21 @@ const LessonDetail: React.FC<LessonDetailProps> = ({
   onDownload,
   onOpenPdf,
 }) => {
+  useEffect(() => {
+    const trackProgress = async () => {
+      try {
+        await fetch("/api/progress", {
+          method: "POST",
+          body: JSON.stringify({ lessonId: lesson.id }),
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (error) {
+        console.error("Failed to track progress", error);
+      }
+    };
+    trackProgress();
+  }, [lesson.id]);
+
   const handleForceDownload = () => {
     onDownload();
     if (lesson.presentationLink) {
