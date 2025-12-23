@@ -22,6 +22,7 @@ export async function PUT(
     delete body.id;
     delete body.createdAt;
     delete body.updatedAt;
+    delete body.resources; // Prevent relation update error
 
     const updatedLesson = await prisma.lesson.update({
       where: { id: lessonId },
