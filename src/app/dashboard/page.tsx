@@ -255,7 +255,7 @@ export default function Dashboard() {
                             }
                           `}
                       >
-                        {cat === "All" ? "All Modules" : cat}
+                        {cat === "All" ? "All Lessons" : cat}
                       </button>
                     ))}
                   </div>
