@@ -95,7 +95,7 @@ model PasswordResetToken {
 
 model Lesson {
   id                  Int     @id @default(autoincrement())
-  title               String // maps to topicName
+  title               String
   urduTitle           String?
   description         String?
   detailedDescription String? @db.Text
@@ -104,24 +104,43 @@ model Lesson {
   surahReference String?
   surahNo        String?
   verses         String?
-  hours          String?
-  part           String // Category (Foundations, Iman, etc.)
+  part           String // Category
 
-  // Content Assets
-  presentationLink String?
-  audioUrl         String? // New: For the audio player
+  // Content Assets (Primary)
+  audioUrl String?
 
   // Access Control
-  minRole UserRole @default(USER) // USER or ADMIN
+  minRole UserRole @default(USER)
 
   // Relations
+  resources   Resource[] // <--- NEW: Link to multiple resources
   progress    UserProgress[]
   reflections Reflection[]
   bookmarks   Bookmark[]
-  flashcards  Flashcard[] // Vocabulary cards linked to this lesson
+  flashcards  Flashcard[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// --- NEW MODEL: Lesson Resources ---
+model Resource {
+  id       String       @id @default(uuid())
+  lessonId Int
+  title    String // e.g., "Lesson PDF", "Reference Link"
+  url      String // The link to the file or website
+  type     ResourceType @default(LINK)
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+enum ResourceType {
+  PDF
+  LINK
+  VIDEO
+  TEXT
 }
 
 model UserProgress {
