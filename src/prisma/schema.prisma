@@ -150,8 +150,9 @@ model UserProgress {
   userId   String
   lessonId Int
 
-  isCompleted Boolean @default(false)
-  lastPlayed  Int     @default(0) // Audio timestamp in seconds
+  isCompleted    Boolean  @default(false)
+  lastPlayed     Int      @default(0) // Audio timestamp in seconds
+  lastAccessedAt DateTime @default(now())
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
