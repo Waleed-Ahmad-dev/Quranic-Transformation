@@ -352,8 +352,8 @@ export default function LessonsPage() {
                       }
                     />
                     <p className="text-xs text-muted-foreground">
-                      This is the main "Presentation/PDF" file linked to this
-                      lesson.
+                      This is the main &quot;Presentation/PDF&quot; file linked
+                      to this lesson.
                     </p>
                   </div>
                 </CardContent>
